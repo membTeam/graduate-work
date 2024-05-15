@@ -14,7 +14,7 @@ import javax.validation.constraints.Size;
 public class Advertisement {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
 
     @Column(name = "user_id")
     private int userId;

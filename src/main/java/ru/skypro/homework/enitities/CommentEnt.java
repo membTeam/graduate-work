@@ -18,7 +18,7 @@ public class CommentEnt {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
 
     @Column(name = "user_id")
     private int userId;

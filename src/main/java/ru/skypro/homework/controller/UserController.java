@@ -11,7 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.NewPassword;
 
 import ru.skypro.homework.dto.UpdateUser;
-import ru.skypro.homework.dto.User;
+import ru.skypro.homework.enitities.User;
 
 @Slf4j
 @RestController

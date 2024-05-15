@@ -1,4 +1,4 @@
-package ru.skypro.homework.enitities;
+package ru.skypro.homework.dto;
 
 
 import lombok.AllArgsConstructor;
@@ -12,20 +12,14 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 
-@Entity
+
 @Getter
-@NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Comment {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class Ad {
     private int pk;
-
     private int author;
-    private String authorImage;
-    private String authorFirstName;
-    private long createdAt;
-    private String text;
-
+    private String image;
+    private int price;
+    private String title;
 }

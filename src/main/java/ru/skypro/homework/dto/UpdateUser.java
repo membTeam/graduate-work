@@ -12,7 +12,6 @@ import javax.validation.constraints.Size;
 
 @Getter
 @AllArgsConstructor
-@NoArgsConstructor
 @Builder
 public class UpdateUser {
 

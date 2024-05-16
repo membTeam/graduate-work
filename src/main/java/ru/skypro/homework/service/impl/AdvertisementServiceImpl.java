@@ -33,11 +33,14 @@ public class AdvertisementServiceImpl  implements AdvertisementService {
 
         var user = userRepository.findByUsername(userDetails.getUsername());
         if (user == null) {
+            log.error("addAdv: пользователь не определен");
             return false;
         }
 
         var photo = adv.getImage();
-        var fileName = String.format("adv-%d-%s", user.getId(), photo.getOriginalFilename());
+
+        var lastIndexOf = photo.getOriginalFilename().lastIndexOf('.');
+        var fileName = String.format("adv-%d-%s", user.getId(), photo.getOriginalFilename().substring(0, lastIndexOf));
 
         AdvertisementImg advertisementImg = null;
 
@@ -62,16 +65,15 @@ public class AdvertisementServiceImpl  implements AdvertisementService {
 
         try {
             var resSave = advRepository.save(advertisement);
-            advertisementImg.setAdvertisement(resSave);
 
+            advertisementImg.setAdvertisement(resSave);
             advertisementImgRepo.save(advertisementImg);
 
             return true;
         } catch (Exception ex) {
-            log.error(ex.getMessage());
+            log.error("addDev: " + ex.getMessage());
             return false;
         }
-
 
     }
 }

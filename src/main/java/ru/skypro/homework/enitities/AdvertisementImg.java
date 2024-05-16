@@ -2,16 +2,21 @@ package ru.skypro.homework.enitities;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.*;
 
 import javax.persistence.*;
 
+@Getter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 public class AdvertisementImg {
     @Id
     private Integer id;
 
     @Column(name = "file_size")
-    private int fileSize;
+    private long fileSize;
 
     @Column(name = "media_type", columnDefinition = "varchar(100)")
     private String mediaType;
@@ -22,6 +27,7 @@ public class AdvertisementImg {
     @MapsId
     @JoinColumn(name = "id")
     @JsonIgnore
+    @Setter
     private Advertisement advertisement;
 
 }

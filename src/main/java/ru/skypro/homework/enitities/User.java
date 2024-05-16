@@ -5,7 +5,6 @@ import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import ru.skypro.homework.dto.Role;
 
 import javax.persistence.*;
@@ -38,6 +37,8 @@ public class User implements UserDetails {
     @Column(columnDefinition = "varchar(50)")
     private String phone;
 
+    @Enumerated(EnumType.STRING)
+    @Column(columnDefinition = "varchar(20)")
     private Role role;
 
     @Column(columnDefinition = "varchar(200)")

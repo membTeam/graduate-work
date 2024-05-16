@@ -19,7 +19,7 @@ public class Advertisement {
     @Column(name = "user_id")
     private int userId;
 
-    @Size(min = 0, max = 10000000, message = "от нуля до 10000000")
+    @Size(min = 0, max = 100000, message = "от нуля до 10000000")
     private int price;
 
     @Column(columnDefinition = "varchar(150)")

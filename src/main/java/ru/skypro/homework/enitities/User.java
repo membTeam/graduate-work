@@ -14,7 +14,7 @@ import java.util.Collection;
 
 
 @Entity
-@Table(name = "users", uniqueConstraints = @UniqueConstraint(columnNames={"username"}))
+@Table(name = "users", uniqueConstraints = @UniqueConstraint(columnNames={"email"}))
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -25,14 +25,27 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    private String username;
-    private String password;
+    @Column(columnDefinition = "varchar(150)")
     private String email;
+    private String password;
+
+    @Column(columnDefinition = "varchar(100)")
     private String firstName;
+
+    @Column(columnDefinition = "varchar(100)")
     private String lastName;
+
+    @Column(columnDefinition = "varchar(50)")
     private String phone;
+
     private Role role;
+
+    @Column(columnDefinition = "varchar(200)")
     private String image;
+
+    public String getUsername() {
+        return email;
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -41,7 +54,6 @@ public class User implements UserDetails {
                 new SimpleGrantedAuthority("ROLE_ADMIN")
                 );
     }
-
 
     @Override
     public boolean isAccountNonExpired() {

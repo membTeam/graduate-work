@@ -26,6 +26,7 @@ public class CommentEnt {
     private long createdAt;
 
     @NotBlank
+    @Column(columnDefinition = "text")
     private String text;
 
     @ManyToOne(fetch = FetchType.LAZY)

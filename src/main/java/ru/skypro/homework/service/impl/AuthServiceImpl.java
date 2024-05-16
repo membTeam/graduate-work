@@ -48,11 +48,9 @@ public class AuthServiceImpl implements AuthService {
             return false;
         }
 
-        // TODO: не использован email требуется согласовние
-
         var user = User.builder()
                 .password(this.encoder.encode(register.getPassword()))
-                .username(register.getUsername())
+                .email(register.getUsername())
                 .firstName(register.getFirstName())
                 .lastName(register.getLastName())
                 .role(register.getRole())

@@ -21,7 +21,11 @@ public class Advertisement {
 
     @Size(min = 0, max = 10000000, message = "от нуля до 10000000")
     private int price;
+
+    @Column(columnDefinition = "varchar(150)")
     private String image;
+
+    @Column(columnDefinition = "varchar(250)")
     private String title;
 
     @ManyToOne(fetch = FetchType.LAZY)

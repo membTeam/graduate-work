@@ -20,7 +20,7 @@ import ru.skypro.homework.service.UserSerive;
 @CrossOrigin(value = "http://localhost:3000")
 @RequiredArgsConstructor
 @RequestMapping("/users")
-public class UserController {
+public class UsersController {
 
     private final UserSerive userSerive;
 
@@ -30,14 +30,14 @@ public class UserController {
     }
 
     @GetMapping("me")
-    public ResponseEntity<?> me(@AuthenticationPrincipal UserDetails user) {
-        // TODO: использование repository
-        var userResult = User.builder()
-                .phone("+7")
-                .firstName("firstName")
-                .lastName("lastName")
-                .build();
-        return  ResponseEntity.ok(userResult);
+    public ResponseEntity<?> me() {
+        var resService = userSerive.getMyInfo();
+
+        if (!resService.RESULT) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+
+        return ResponseEntity.ok(resService.VALUE);
     }
 
     @PatchMapping("me")

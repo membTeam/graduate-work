@@ -1,9 +1,18 @@
 package ru.skypro.homework.service;
 
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.Adv;
+import ru.skypro.homework.utils.ValueFromMethod;
+
+import javax.transaction.Transactional;
 
 public interface AdvertisementService {
-    boolean addAdv(Adv adv);
 
+    @Transactional
+    boolean addAd(Adv adv, MultipartFile photo);
+
+    ValueFromMethod myAd();
+
+/*    @Transactional
+    boolean addAd(Adv adv);*/
 }

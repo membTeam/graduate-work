@@ -15,8 +15,8 @@ import java.io.Serializable;
 @Setter
 @AllArgsConstructor
 public class Adv implements Serializable {
+    //private MultipartFile image;
     private String title;
     private int price;
     private String description;
-    private MultipartFile image;
 }

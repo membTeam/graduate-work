@@ -28,6 +28,8 @@ public class Advertisement {
     @Column(columnDefinition = "varchar(250)")
     private String title;
 
+    private byte[] data;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false, updatable = false, insertable = false)
     User user;

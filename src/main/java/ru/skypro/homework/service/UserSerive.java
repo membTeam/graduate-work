@@ -2,7 +2,11 @@ package ru.skypro.homework.service;
 
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.multipart.MultipartFile;
+import ru.skypro.homework.dto.UserDTO;
+import ru.skypro.homework.utils.ValueFromMethod;
 
 public interface UserSerive {
+    ValueFromMethod<UserDTO> getMyInfo();
+
     boolean setImage(MultipartFile image);
 }

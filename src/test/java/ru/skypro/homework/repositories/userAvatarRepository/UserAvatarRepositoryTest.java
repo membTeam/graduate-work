@@ -17,11 +17,8 @@ public class UserAvatarRepositoryTest {
 
     @Test
     public void loadAvatar_default() throws IOException {
-
         var result = fileAPI.loadAvatar(-1);
-
         assertTrue(result.length>0);
-
     }
 
 }

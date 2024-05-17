@@ -41,8 +41,8 @@ public class User implements UserDetails {
     @Column(columnDefinition = "varchar(20)")
     private Role role;
 
-    @Column(columnDefinition = "varchar(200)")
-    private String image;
+/*    @Column(columnDefinition = "varchar(200)")
+    private String image;*/
 
     public String getUsername() {
         return email;

@@ -1,5 +1,6 @@
 package ru.skypro.homework.controller;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.userdetails.UserDetails;
 import lombok.RequiredArgsConstructor;
@@ -12,6 +13,7 @@ import ru.skypro.homework.dto.NewPassword;
 
 import ru.skypro.homework.dto.UpdateUser;
 import ru.skypro.homework.enitities.User;
+import ru.skypro.homework.service.UserSerive;
 
 @Slf4j
 @RestController
@@ -19,6 +21,8 @@ import ru.skypro.homework.enitities.User;
 @RequiredArgsConstructor
 @RequestMapping("/users")
 public class UserController {
+
+    private final UserSerive userSerive;
 
     @PostMapping("set-password")
     public ResponseEntity<?> setPassword(@RequestBody NewPassword newPassword) {
@@ -43,6 +47,10 @@ public class UserController {
 
     @PatchMapping(value = "me/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> setImage(@RequestBody MultipartFile image) {
+        if (!userSerive.setImage(image)) {
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        }
+
         return ResponseEntity.ok().build();
     }
 

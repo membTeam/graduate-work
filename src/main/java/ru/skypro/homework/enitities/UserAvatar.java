@@ -20,6 +20,9 @@ public class UserAvatar {
     @Column(name = "media_type", columnDefinition = "varchar(100)")
     private String mediaType;
 
+    @Column(columnDefinition = "varchar(150)")
+    private String image;
+
     private byte[] data;
 
     @OneToOne

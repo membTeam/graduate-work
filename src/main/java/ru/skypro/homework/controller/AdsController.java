@@ -11,12 +11,9 @@ import ru.skypro.homework.dto.Ad;
 import ru.skypro.homework.dto.Ads;
 import ru.skypro.homework.dto.Adv;
 import ru.skypro.homework.dto.UserDTO;
-import ru.skypro.homework.enitities.AdvertisementImg;
-import ru.skypro.homework.enitities.User;
 import ru.skypro.homework.repositories.AdvertisementRepository;
 import ru.skypro.homework.service.AdvertisementService;
 import ru.skypro.homework.utils.UserUtils;
-import ru.skypro.homework.utils.ValueFromMethod;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,18 +27,16 @@ public class AdsController {
 
     private final UserUtils userUtils;
     private final AdvertisementService advertisementServ;
-    private final AdvertisementRepository advertisementRepo;
 
     @GetMapping()
     public ResponseEntity<?> allAd() {
-        List<Ad> lsAd = new ArrayList<>();
 
-        Ads ads = Ads.builder()
-                .count(0)
-                .results(lsAd)
-                .build();
+        var res = advertisementServ.allAd();
+        if (!res.RESULT) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
 
-        return ResponseEntity.ok(ads);
+        return ResponseEntity.ok(res.VALUE);
     }
 
     @GetMapping("/{id}")
@@ -73,6 +68,7 @@ public class AdsController {
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> addAds(@RequestPart("properties") Adv adv,
                              @RequestPart("image") MultipartFile image) {
+
         if (!advertisementServ.addAd(adv, image)) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
@@ -80,21 +76,32 @@ public class AdsController {
         return ResponseEntity.ok().build();
     }
 
-    @PatchMapping("/{id}/image")
-    public ResponseEntity<?> updateImageAd(@PathVariable Integer id) {
+    @PatchMapping(value = "/{id}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<?> updateImageAd(@PathVariable Integer id, @RequestParam MultipartFile image) {
+
+        if (!advertisementServ.updateImageAd(id, image)) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
         return ResponseEntity.ok().build();
     }
 
     @PatchMapping("/{id}")
     public ResponseEntity<?> updateAd(@PathVariable Integer id, @RequestBody Adv adv) {
+        if (!advertisementServ.updateAd(id, adv)) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
         return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/{id}")
-    public void deleteAd(@PathVariable Integer id) {
-        return;
+    public ResponseEntity<?> deleteAd(@PathVariable Integer id) {
+        if (!advertisementServ.deleteAd(id)) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        return ResponseEntity.ok().build();
     }
-
-
 
 }

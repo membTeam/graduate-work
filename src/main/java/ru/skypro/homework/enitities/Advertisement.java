@@ -17,7 +17,7 @@ public class Advertisement {
     private Integer id;
 
     @Column(name = "user_id")
-    private int userId;
+    private Integer userId;
 
     @Size(min = 0, max = 100000, message = "от нуля до 10000000")
     private int price;
@@ -27,6 +27,9 @@ public class Advertisement {
 
     @Column(columnDefinition = "varchar(250)")
     private String title;
+
+    @Column(columnDefinition = "varchar(500)")
+    private String description;
 
     private byte[] data;
 

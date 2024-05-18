@@ -8,10 +8,19 @@ import javax.transaction.Transactional;
 
 public interface AdvertisementService {
 
+    boolean updateImageAd(Integer id, MultipartFile image);
+
     @Transactional
     boolean addAd(Adv adv, MultipartFile photo);
 
     ValueFromMethod myAd();
+
+    boolean updateAd(Integer advId, Adv ad);
+
+    boolean deleteAd(Integer advId);
+
+    ValueFromMethod allAd();
+
 
 /*    @Transactional
     boolean addAd(Adv adv);*/

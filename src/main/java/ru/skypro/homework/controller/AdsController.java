@@ -28,6 +28,11 @@ public class AdsController {
     private final UserUtils userUtils;
     private final AdvertisementService advertisementServ;
 
+
+
+
+    // -----------------------------------
+
     @GetMapping()
     public ResponseEntity<?> allAd() {
 

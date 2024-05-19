@@ -5,9 +5,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import ru.skypro.homework.dto.NewPassword;
+import ru.skypro.homework.dto.UpdateUser;
 import ru.skypro.homework.dto.UserDTO;
 import ru.skypro.homework.enitities.UserAvatar;
 import ru.skypro.homework.repositories.UserAvatarRepository;
@@ -27,6 +30,8 @@ public class UserServiceImpl implements UserSerive {
     private final UserRepository userRepo;
     private final UserUtils userUtils;
     private final UserAvatarRepository userAvatarRepo;
+    private final PasswordEncoder encoder;
+
 
     @Override
     public ValueFromMethod<UserDTO> getMyInfo() {
@@ -53,7 +58,7 @@ public class UserServiceImpl implements UserSerive {
                 .role(user.getRole().name())
                 .firstName(user.getFirstName())
                 .lastName(user.getLastName())
-                .image(image)
+                .image(user.getAvatar() != null ?  user.getAvatar().getImage() : "empty" )
                 .build();
 
         return new ValueFromMethod(userDTO);
@@ -97,4 +102,55 @@ public class UserServiceImpl implements UserSerive {
         }
 
     }
+
+    @Override
+    public ValueFromMethod setPassword(NewPassword newPassword) {
+
+        try {
+            User user = userUtils.getUserByUsername().VALUE;
+            var curPassword = user.getPassword();
+
+            if (!encoder.matches(newPassword.getCurrentPassword(), curPassword)) {
+                throw new Exception("Ошибка текущего пароля");
+            }
+
+            if (newPassword.getNewPassword().isBlank()) {
+                throw new IllegalArgumentException("Пустой пароль");
+            }
+
+            user.setPassword(encoder.encode(newPassword.getNewPassword()));
+            userRepo.save(user);
+
+            return new ValueFromMethod(true, "ok");
+
+        } catch (Exception ex) {
+            return ValueFromMethod.resultErr("setPassword: " + ex.getMessage());
+        }
+    }
+
+    @Override
+    public ValueFromMethod updateUser(UpdateUser updateUser) {
+
+        try {
+            var user = userUtils.getUserByUsername().VALUE;
+
+            user.setPhone(updateUser.getPhone());
+            user.setFirstName(updateUser.getFirstName());
+            user.setLastName(updateUser.getLastName());
+
+            var userSave = userRepo.save(user);
+
+            var result = UpdateUser.builder()
+                    .phone(userSave.getPhone())
+                    .firstName(userSave.getFirstName())
+                    .lastName(userSave.getLastName())
+                    .build();
+
+            return new ValueFromMethod(result);
+
+        } catch (Exception ex) {
+            return ValueFromMethod.resultErr("updateUser: " + ex.getMessage());
+        }
+    }
+
 }

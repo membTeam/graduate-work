@@ -15,13 +15,15 @@ import javax.validation.constraints.NotBlank;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CommentEnt {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @Column(name = "user_id")
-    private int userId;
+    private Integer userId;
+
+    @Column(name = "ad_id")
+    private Integer adId;
 
     private long createdAt;
 
@@ -32,4 +34,9 @@ public class CommentEnt {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false, insertable = false, updatable = false)
     User user;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "ad_id", nullable = false, insertable = false, updatable = false)
+    Advertisement ad; ;
+
 }

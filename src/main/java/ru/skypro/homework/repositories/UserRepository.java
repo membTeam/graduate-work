@@ -17,4 +17,10 @@ public interface UserRepository extends CrudRepository<User, Integer> {
             " else -1 end;", nativeQuery = true)
     Integer getUserIdByUsername(String username);
 
+    @Query(value = "select case " +
+            "when exists(select * from user_avatar av where av.id = :id ) " +
+            "then (select image from user_avatar av where av.id = :id ) " +
+            "else 'empty' end;", nativeQuery = true)
+    String getImageAvatar(Integer id);
+
 }

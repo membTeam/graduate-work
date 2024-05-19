@@ -14,6 +14,7 @@ import ru.skypro.homework.dto.NewPassword;
 import ru.skypro.homework.dto.UpdateUser;
 import ru.skypro.homework.enitities.User;
 import ru.skypro.homework.service.UserSerive;
+import ru.skypro.homework.utils.ValueFromMethod;
 
 @Slf4j
 @RestController
@@ -26,7 +27,24 @@ public class UsersController {
 
     @PostMapping("set-password")
     public ResponseEntity<?> setPassword(@RequestBody NewPassword newPassword) {
+
+        if (!userSerive.setPassword(newPassword).RESULT) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+
         return ResponseEntity.ok().build();
+    }
+
+    @PatchMapping("me")
+    public ResponseEntity<?> updateMe(@RequestBody UpdateUser updateUser) {
+
+        var resultUpdate = userSerive.updateUser(updateUser);
+
+        if (!resultUpdate.RESULT) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+
+        return ResponseEntity.ok(resultUpdate.VALUE);
     }
 
     @GetMapping("me")
@@ -38,11 +56,6 @@ public class UsersController {
         }
 
         return ResponseEntity.ok(resService.VALUE);
-    }
-
-    @PatchMapping("me")
-    public ResponseEntity<?> updateMe(@RequestBody UpdateUser updateUser) {
-        return ResponseEntity.ok().build();
     }
 
     @PatchMapping(value = "me/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)

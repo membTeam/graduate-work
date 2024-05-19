@@ -18,7 +18,7 @@ public class UserUtils {
     public ValueFromMethod<User> getUserByUsername() {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        return getUserByUsername(userDetails);
+        return getUserByUsername(userDetails.getUsername());
     }
 
     public ValueFromMethod<User> getUserByUsername(UserDetails userDetails) {

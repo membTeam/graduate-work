@@ -14,6 +14,21 @@ public class UserRepositoryTest {
     private UserRepository userRepository;
 
     @Test
+    public void findByUsername() {
+        var user = userRepository.findByUsername("usermail@mail.ru");
+
+        assertNotNull(user);
+    }
+
+
+    @Test
+    public void getImageAvatar() {
+        var res = userRepository.getImageAvatar(1);
+
+        assertNotNull(res);
+    }
+
+    @Test
     public void getUserIdByUsername() {
         var res = userRepository.getUserIdByUsername("nikuser");
 

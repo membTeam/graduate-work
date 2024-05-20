@@ -139,7 +139,11 @@ public class AdvertisementServiceImpl  implements AdvertisementService {
         User user = fromUserUtils.VALUE;
 
         var lastIndexOf = image.getOriginalFilename().lastIndexOf('.');
-        var fileName = String.format("adv-%d-%s", user.getId(), image.getOriginalFilename().substring(0, lastIndexOf));
+        var hashName = String.format("adv-$d", user.getId()).hashCode();
+
+        var fileName = String.format("%s-%s",
+                hashName < 0 ? "img"+hashName : "image-"+ hashName,
+                image.getOriginalFilename().substring(0, lastIndexOf));
 
         try {
             var advertisement = Advertisement.builder()
@@ -147,6 +151,8 @@ public class AdvertisementServiceImpl  implements AdvertisementService {
                     .title(adv.getTitle())
                     .userId(user.getId())
                     .image(fileName)
+                    .size(image.getSize())
+                    .metaData(image.getContentType())
                     .description(adv.getDescription())
                     .data(image.getBytes())
                     .user(user)

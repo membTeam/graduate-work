@@ -5,8 +5,12 @@ import org.springframework.data.jpa.repository.Query;
 import ru.skypro.homework.enitities.Advertisement;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface AdvertisementRepository extends JpaRepository<Advertisement, Integer> {
     @Query("From Advertisement a where a.userId = :id ")
-    public List<Advertisement> findAllAdv(Integer id);
+    List<Advertisement> findAllAdv(Integer id);
+
+    Optional<Advertisement> findByImage(String image);
+
 }

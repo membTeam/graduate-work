@@ -11,6 +11,7 @@ import javax.validation.constraints.Size;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(uniqueConstraints = @UniqueConstraint(columnNames={"image"}))
 public class Advertisement {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,6 +28,11 @@ public class Advertisement {
 
     @Column(columnDefinition = "varchar(250)")
     private String title;
+
+    private long size;
+
+    @Column(columnDefinition = "varchar(150)")
+    private String metaData;
 
     @Column(columnDefinition = "varchar(500)")
     private String description;

@@ -19,7 +19,7 @@ public class ImgControllerServiceImpl implements ImgControllerService {
     @Override
     public WebResultPhoto getPhotoAdv(String image) {
         try {
-            var adv = advertisementRepo.findByImage(image).orElseThrow();
+            var adv = advertisementRepo.findByImage("/"+image).orElseThrow();
 
             HttpHeaders headers;
             headers = new HttpHeaders();

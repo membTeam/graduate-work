@@ -30,7 +30,7 @@ public class UserRepositoryTest {
 
     @Test
     public void getUserIdByUsername() {
-        var res = userRepository.getUserIdByUsername("nikuser");
+        var res = userRepository.getUserIdByUsername("usermail@mail.ru");
 
         assertTrue(res>0);
     }

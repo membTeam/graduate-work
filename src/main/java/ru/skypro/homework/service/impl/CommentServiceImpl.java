@@ -2,8 +2,6 @@ package ru.skypro.homework.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import ru.skypro.homework.dto.Comment;
@@ -54,7 +52,7 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public ValueFromMethod<Comments> getCommentsForId(Integer id) {
 
-        var lsComments = commentRepo.getCommentsByUserId(id);
+        var lsComments = commentRepo.getCommentsByAdvertisement(id);
 
         var results = lsComments.stream().map(item ->
                 Comment.builder()

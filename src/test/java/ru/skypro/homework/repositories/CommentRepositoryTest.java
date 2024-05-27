@@ -17,14 +17,14 @@ public class CommentRepositoryTest {
 
     @Test
     public void getCommentsByUserId() {
-        var res = commentRepo.getCommentsByUserId(1);
+        var res = commentRepo.getCommentsByAdvertisement(1);
 
         assertNotNull(res);
     }
 
     @Test
     public void getCommentByUserId_forObj() {
-        var lsComments = commentRepo.getCommentsByUserId(1);
+        var lsComments = commentRepo.getCommentsByAdvertisement(8);
 
         var results = lsComments.stream().map(item ->
                 Comment.builder()
@@ -44,7 +44,7 @@ public class CommentRepositoryTest {
     @Test
     public void getListCommentByAdId() {
 
-        var resLs = commentRepo.getListCommentByAdId(1);
+        var resLs = commentRepo.getListCommentByAdId(8);
 
         assertTrue(resLs.size() > 0);
     }

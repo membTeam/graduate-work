@@ -17,6 +17,6 @@ public interface CommentRepository extends JpaRepository<CommentEnt, Integer> {
             "join comment com on ad.id = com.ad_id and ad.id = :param " +
             "join users u on com.user_id = u.id " +
             "left join user_avatar ua on u.id = ua.id", nativeQuery = true)
-    List<List<Object>> getCommentsByUserId(Integer param);
+    List<List<Object>> getCommentsByAdvertisement(Integer param);
 
 }

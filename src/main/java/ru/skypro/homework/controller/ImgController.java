@@ -13,12 +13,25 @@ import ru.skypro.homework.service.ImgControllerService;
 
 @RestController
 @RequiredArgsConstructor
-//@RequestMapping("/img-adv")
+@RequestMapping("/img")
 public class ImgController {
 
     private final ImgControllerService imgControllerService;
 
-    @GetMapping("/{image}")
+    @GetMapping("avatar/{image}")
+    public ResponseEntity<byte[]> getImagAvatar(@PathVariable String image) {
+        WebResultPhoto result = imgControllerService.getImageAvatar(image);
+
+        if (!result.isResult()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+
+        return ResponseEntity.ok()
+                .headers(result.getHttpHeaders())
+                .body(result.getByteData());
+    }
+
+    @GetMapping("adv/{image}")
     public ResponseEntity<byte[]> getImagAdv(@PathVariable String image) {
         WebResultPhoto result = imgControllerService.getPhotoAdv(image);
 

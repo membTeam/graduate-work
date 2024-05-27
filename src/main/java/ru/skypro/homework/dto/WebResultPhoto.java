@@ -1,10 +1,7 @@
 package ru.skypro.homework.dto;
 
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import lombok.extern.log4j.Log4j;
 import org.springframework.http.HttpHeaders;
 
@@ -12,6 +9,7 @@ import org.springframework.http.HttpHeaders;
 @Getter
 @Builder
 @AllArgsConstructor
+@NoArgsConstructor
 public final class WebResultPhoto {
 
     private boolean result;
@@ -19,6 +17,8 @@ public final class WebResultPhoto {
     private long size;
 
     private byte[] byteData;
+
+    @Setter
     private HttpHeaders httpHeaders;
 
     public static WebResultPhoto resultErr (String mes) {
@@ -26,6 +26,15 @@ public final class WebResultPhoto {
         return WebResultPhoto.builder()
                 .result(false)
                 .message(mes)
+                .build();
+    }
+
+    public static WebResultPhoto getWebResultPhoto(byte[] data) {
+        return WebResultPhoto.builder()
+                .result(true)
+                .message("ok")
+                .byteData(data)
+                .size(data.length)
                 .build();
     }
 

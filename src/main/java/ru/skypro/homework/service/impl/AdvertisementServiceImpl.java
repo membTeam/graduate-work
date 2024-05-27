@@ -142,7 +142,7 @@ public class AdvertisementServiceImpl  implements AdvertisementService {
         var hashName = String.format("adv-$d", user.getId()).hashCode();
 
         var fileName = String.format("%s-%s",
-                hashName < 0 ? "img"+hashName : "image-"+ hashName,
+                hashName < 0 ? "/img/adv/img"+hashName : "/img/adv/image"+ hashName,
                 image.getOriginalFilename().substring(0, lastIndexOf));
 
         try {

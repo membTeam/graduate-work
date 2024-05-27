@@ -79,7 +79,7 @@ public class UserServiceImpl implements UserSerive {
             User user = dataFromUserUtils.VALUE;
 
             var hashId = user.getId().toString().hashCode();
-            var strImage = String.format("ava-%d", hashId);
+            var strImage = String.format("/img/avatar/avatar-%d", hashId);
 
             UserAvatar userAvatar = UserAvatar.builder()
                     .user(user)

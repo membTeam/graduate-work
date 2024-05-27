@@ -7,7 +7,7 @@ import ru.skypro.homework.utils.ValueFromMethod;
 
 public interface CommentService {
 
-    ValueFromMethod<Comments> getCommentsForId(Integer id);
+    ValueFromMethod<Comments> getCommentsByAdvId(Integer id);
 
     ValueFromMethod<Comment> addComment(Integer adId, CommentAdd comment);
 

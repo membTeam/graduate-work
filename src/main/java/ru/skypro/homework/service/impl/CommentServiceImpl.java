@@ -10,8 +10,10 @@ import ru.skypro.homework.dto.Comments;
 import ru.skypro.homework.dto.Role;
 import ru.skypro.homework.enitities.CommentEnt;
 import ru.skypro.homework.enitities.User;
+import ru.skypro.homework.enitities.UserAvatar;
 import ru.skypro.homework.repositories.AdvertisementRepository;
 import ru.skypro.homework.repositories.CommentRepository;
+import ru.skypro.homework.repositories.UserAvatarRepository;
 import ru.skypro.homework.repositories.UserRepository;
 import ru.skypro.homework.service.CommentService;
 import ru.skypro.homework.utils.UserUtils;
@@ -29,6 +31,7 @@ public class CommentServiceImpl implements CommentService {
     private final CommentRepository commentRepo;
     private final AdvertisementRepository advertisementRepository;
     private final UserRepository userRepo;
+    private final UserAvatarRepository userAvatarRepo;
     private final UserUtils userUtils;
 
 
@@ -38,46 +41,67 @@ public class CommentServiceImpl implements CommentService {
     }
 
     private Comment initComment(CommentEnt comment, User user) {
-        return Comment.builder()
-                .createdAt(comment.getCreatedAt())
-                .text(comment.getText())
-                .author(comment.getUserId())
-                .authorFirstName(user.getFirstName())
-                .pk(comment.getAdId())
-                .authorImage(user.getAvatar() != null
-                        ? user.getAvatar().getImage() : "empty")
-                .build();
+            var userAvatar = userAvatarRepo.findById(user.getId());
+            var image = userAvatar.isEmpty() ? "/img/avatar/empty" : userAvatar.orElseThrow().getImage();
+
+            return Comment.builder()
+                    .createdAt(comment.getCreatedAt())
+                    .text(comment.getText())
+                    .author(comment.getUserId())
+                    .authorFirstName(user.getFirstName())
+                    .pk(comment.getAdId())
+                    .authorImage(image)
+                    .build();
+    }
+
+    private String getImageAvatar(Integer userId) {
+        try {
+            var userAvatar = userAvatarRepo.findById(userId).orElseThrow();
+            return userAvatar.getImage();
+
+        } catch (Exception ex) {
+            return "/img/avatar/empty";
+        }
     }
 
     @Override
-    public ValueFromMethod<Comments> getCommentsForId(Integer id) {
+    public ValueFromMethod<Comments> getCommentsByAdvId(Integer id) {
 
-        var lsComments = commentRepo.getCommentsByAdvertisement(id);
+        try {
+            var adv = advertisementRepository.findById(id).orElseThrow();
+            //final String strImage = getImageAvatar(adv.getUserId());
 
-        var results = lsComments.stream().map(item ->
-                Comment.builder()
-                        .author((Integer) item.get(0))
-                        .pk((Integer) item.get(1))
-                        .authorFirstName(item.get(2).toString())
-                        .text(item.get(3).toString())
-                        .createdAt(Long.parseLong(String.valueOf(item.get(4))))
-                        .authorImage(item.get(5).toString())
-                        .build()
-        ).collect(Collectors.toList());
+            var lsComments = commentRepo.getCommentsByAdvertisement(id);
 
-        Comments comments = Comments.builder()
-                .count(results.size())
-                .results(results)
-                .build();
+            var results = lsComments.stream().map(item ->
+                    Comment.builder()
+                            .author((Integer) item.get(0))
+                            .pk((Integer) item.get(1))
+                            .authorFirstName(item.get(2).toString())
+                            .text(item.get(3).toString())
+                            .createdAt(Long.parseLong(String.valueOf(item.get(4))))
+                            .authorImage(item.get(5).toString())
+                            .build()
+            ).collect(Collectors.toList());
 
-        return new ValueFromMethod(comments);
+            Comments comments = Comments.builder()
+                    .count(results.size())
+                    .results(results)
+                    .build();
+
+            return new ValueFromMethod(comments);
+
+        } catch (Exception ex) {
+            log.error(ex.getMessage());
+            return new ValueFromMethod(ex.getMessage());
+        }
     }
 
     @Override
     public ValueFromMethod<Comment> addComment(Integer adId, CommentAdd comment) {
         try {
             var ad = advertisementRepository.findById(adId).orElseThrow();
-            var user = userRepo.findById(ad.getUserId()).orElseThrow();
+            var user = userUtils.getUserByUsername().getValue();
 
             var now = LocalDateTime.now();
             long createdAt = now.toInstant(ZoneOffset.UTC).toEpochMilli();

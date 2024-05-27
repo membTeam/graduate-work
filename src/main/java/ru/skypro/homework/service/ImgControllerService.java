@@ -5,4 +5,6 @@ import ru.skypro.homework.dto.WebResultPhoto;
 public interface ImgControllerService {
 
     WebResultPhoto getPhotoAdv(String image);
+
+    WebResultPhoto getImageAvatar(String image);
 }

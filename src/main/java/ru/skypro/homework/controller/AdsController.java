@@ -8,14 +8,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.*;
-import ru.skypro.homework.repositories.AdvertisementRepository;
 import ru.skypro.homework.service.AdvertisementService;
 import ru.skypro.homework.service.CommentService;
 import ru.skypro.homework.utils.UserUtils;
 import ru.skypro.homework.utils.ValueFromMethod;
-
-import java.util.ArrayList;
-import java.util.List;
 
 
 @CrossOrigin(value = "http://localhost:3000")
@@ -54,7 +50,7 @@ public class AdsController {
 
     @GetMapping("{id}/comments")
     public ResponseEntity<?> getCommentsForId(@PathVariable Integer id) {
-       ValueFromMethod<Comments> resData = commentService.getCommentsForId(id);
+       ValueFromMethod<Comments> resData = commentService.getCommentsByAdvId(id);
 
         if (!resData.RESULT) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();

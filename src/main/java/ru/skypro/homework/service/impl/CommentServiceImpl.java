@@ -145,7 +145,7 @@ public class CommentServiceImpl implements CommentService {
     public ValueFromMethod<Comment> deleteComment(Integer adId, Integer commentId) {
         try {
             var commFind = commentRepo.findById(commentId).orElseThrow();
-            var user = userUtils.getUserByUsername().VALUE;
+            var user = userUtils.getUserByUsername().getValue();
 
             if (user == null) {
                 throw new UsernameNotFoundException("Нет пользователя");
@@ -157,7 +157,7 @@ public class CommentServiceImpl implements CommentService {
 
             commentRepo.deleteById(commFind.getId());
 
-            return new ValueFromMethod(true, "ok");
+            return ValueFromMethod.resultOk();
 
         } catch (Exception ex) {
             return initResultError("deleteComment: " + ex.getMessage());

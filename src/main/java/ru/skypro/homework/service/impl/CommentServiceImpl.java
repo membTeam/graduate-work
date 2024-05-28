@@ -68,8 +68,6 @@ public class CommentServiceImpl implements CommentService {
     public ValueFromMethod<Comments> getCommentsByAdvId(Integer id) {
 
         try {
-            var adv = advertisementRepository.findById(id).orElseThrow();
-            //final String strImage = getImageAvatar(adv.getUserId());
 
             var lsComments = commentRepo.getCommentsByAdvertisement(id);
 

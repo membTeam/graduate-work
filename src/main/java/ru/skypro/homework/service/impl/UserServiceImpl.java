@@ -24,7 +24,7 @@ import javax.transaction.Transactional;
 
 @Service
 @Log4j
-@RequiredArgsConstructor
+//@RequiredArgsConstructor
 public class UserServiceImpl implements UserSerive {
 
     private final UserRepository userRepo;
@@ -32,6 +32,12 @@ public class UserServiceImpl implements UserSerive {
     private final UserAvatarRepository userAvatarRepo;
     private final PasswordEncoder encoder;
 
+    public UserServiceImpl(UserRepository userRepo, UserUtils userUtils, UserAvatarRepository userAvatarRepo, PasswordEncoder encoder) {
+        this.userRepo = userRepo;
+        this.userUtils = userUtils;
+        this.userAvatarRepo = userAvatarRepo;
+        this.encoder = encoder;
+    }
 
     @Override
     public ValueFromMethod<UserDTO> getMyInfo() {
@@ -43,10 +49,10 @@ public class UserServiceImpl implements UserSerive {
             return new ValueFromMethod(false, str);
         }
 
-        var user = resFromUtils.VALUE;
+        var user = resFromUtils.getValue();
         var userAvatarFromRepo = userAvatarRepo.findById(user.getId());
 
-        String image = "not data";
+        String image = "/img/adv/image/empty";
         if (userAvatarFromRepo.isPresent()) {
             image = (userAvatarFromRepo.orElseThrow()).getImage();
         }
@@ -58,7 +64,7 @@ public class UserServiceImpl implements UserSerive {
                 .role(user.getRole().name())
                 .firstName(user.getFirstName())
                 .lastName(user.getLastName())
-                .image(user.getAvatar() != null ?  user.getAvatar().getImage() : "empty" )
+                .image(image)
                 .build();
 
         return new ValueFromMethod(userDTO);
@@ -67,16 +73,15 @@ public class UserServiceImpl implements UserSerive {
     @Override
     @Transactional
     public boolean setImage(MultipartFile image) {
-        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        var dataFromUserUtils = userUtils.getUserByUsername(userDetails);
-
-        if (!dataFromUserUtils.RESULT) {
-            log.error(dataFromUserUtils.MESSAGE);
-            return false;
-        }
 
         try {
-            User user = dataFromUserUtils.VALUE;
+            var dataFromUserUtils = userUtils.getUserByUsername();
+
+            if (!dataFromUserUtils.RESULT) {
+                throw  new Exception(dataFromUserUtils.MESSAGE);
+            }
+
+            User user = dataFromUserUtils.getValue();
 
             var hashId = user.getId().toString().hashCode();
             var strImage = String.format("/img/avatar/avatar-%d", hashId);
@@ -100,28 +105,28 @@ public class UserServiceImpl implements UserSerive {
             log.error("setImage: " + ex.getMessage());
             return false;
         }
-
     }
 
     @Override
-    public ValueFromMethod setPassword(NewPassword newPassword) {
+    public ValueFromMethod<User> setPassword(NewPassword newPassword) {
 
         try {
-            User user = userUtils.getUserByUsername().VALUE;
-            var curPassword = user.getPassword();
-
-            if (!encoder.matches(newPassword.getCurrentPassword(), curPassword)) {
-                throw new Exception("Ошибка текущего пароля");
-            }
+            var user = userUtils.getUserByUsername().getValue();
 
             if (newPassword.getNewPassword().isBlank()) {
                 throw new IllegalArgumentException("Пустой пароль");
             }
 
-            user.setPassword(encoder.encode(newPassword.getNewPassword()));
-            userRepo.save(user);
+            if (!encoder.matches(newPassword.getCurrentPassword(), user.getPassword() )) {
+                throw new Exception("Ошибка текущего пароля");
+            }
 
-            return new ValueFromMethod(true, "ok");
+            var newPsw = encoder.encode(newPassword.getNewPassword());
+            user.setPassword(newPsw);
+
+            var userSave = userRepo.save(user);
+
+            return new ValueFromMethod(userSave);
 
         } catch (Exception ex) {
             return ValueFromMethod.resultErr("setPassword: " + ex.getMessage());
@@ -129,7 +134,7 @@ public class UserServiceImpl implements UserSerive {
     }
 
     @Override
-    public ValueFromMethod updateUser(UpdateUser updateUser) {
+    public ValueFromMethod<UpdateUser> updateUser(UpdateUser updateUser) {
 
         try {
             var user = userUtils.getUserByUsername().VALUE;

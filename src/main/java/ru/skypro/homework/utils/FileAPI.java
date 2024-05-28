@@ -10,6 +10,7 @@ import ru.skypro.homework.repositories.UserAvatarRepository;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 
 @Component
 public class FileAPI {
@@ -17,7 +18,7 @@ public class FileAPI {
     private static final Logger log = LoggerFactory.getLogger(FileAPI.class);
     private final UserAvatarRepository userAvatarRepository;
     private final Path PATH_FILE_AVATAR_DEFAULT;
-
+    private final Path PATH_DIR_IMG;
 
     public FileAPI(@Value("${file.avatar.default}") String fileAvatarDefault,
                    @Value("${directory.img}") String dirImg,
@@ -25,6 +26,11 @@ public class FileAPI {
 
         this.userAvatarRepository = userAvatarRepository;
         this.PATH_FILE_AVATAR_DEFAULT = Path.of(dirImg, fileAvatarDefault);
+        this.PATH_DIR_IMG = Paths.get(dirImg);
+    }
+
+    public Path getPathDirImage() {
+        return PATH_DIR_IMG;
     }
 
     public byte[] loadDefaultAvatar() throws IOException {

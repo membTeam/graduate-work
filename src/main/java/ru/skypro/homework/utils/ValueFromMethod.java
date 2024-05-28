@@ -33,4 +33,8 @@ public final class ValueFromMethod<T> {
         log.error(strErr);
         return new ValueFromMethod(false, strErr);
     }
+
+    public static ValueFromMethod resultOk() {
+        return new ValueFromMethod(true, "ok");
+    }
 }

@@ -23,4 +23,7 @@ public interface UserRepository extends CrudRepository<User, Integer> {
             "else 'empty' end;", nativeQuery = true)
     String getImageAvatar(Integer id);
 
+    @Query(value = "select us from Users us where us.id = (select min(u.id) from Users u where u.role = 'USER' );", nativeQuery = true)
+    User getDefaultUser();
+
 }

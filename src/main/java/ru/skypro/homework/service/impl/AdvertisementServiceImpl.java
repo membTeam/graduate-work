@@ -180,7 +180,7 @@ public class AdvertisementServiceImpl  implements AdvertisementService {
         User user = fromUserUtils.VALUE;
         Ads ads = initAds(advRepository.findAllAdv(user.getId()));
 
-        return new ValueFromMethod<>(ads);
+        return new ValueFromMethod(ads);
     }
 
 }

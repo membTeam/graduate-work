@@ -52,12 +52,11 @@ public class ImgControllerServiceImpl implements ImgControllerService {
         WebResultPhoto result;
 
         try {
-            if (image.equals("empty")) {
+            if (image.equals("empty") || image.equals("/img/avatar/empty")) {
                 result = fileAPI.loadDefaultPhotoAvatar();
                 metaData = "image/png";
             } else {
-                var user = userUtils.getUserByUsername();
-                var userAvatar = userAvatarRepo.findById(user.getValue().getId()).orElseThrow();
+                var userAvatar = userAvatarRepo.findByImage("/img/avatar/" + image);
 
                 result = WebResultPhoto.getWebResultPhoto(userAvatar.getData());
                 metaData = userAvatar.getMediaType();

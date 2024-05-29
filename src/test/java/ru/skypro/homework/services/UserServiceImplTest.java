@@ -64,7 +64,7 @@ public class UserServiceImplTest {
         var hashId = user.getId().toString().hashCode();
         var strImage = String.format("/img/avatar/avatar-%d", hashId);
 
-        var userAfterSave = UserAvatar.builder()
+        var userAvatarAfterSave = UserAvatar.builder()
                 .id(1)
                 .image(strImage)
                 .build();
@@ -79,7 +79,7 @@ public class UserServiceImplTest {
         );
 
         when(userRepo.getDefaultUser()).thenReturn(user);
-        when(userAvatarRepo.save(any(UserAvatar.class))).thenReturn(userAfterSave);
+        when(userAvatarRepo.save(any(UserAvatar.class))).thenReturn(userAvatarAfterSave);
 
         assertTrue(userServiceImpl.setImage(file));
 

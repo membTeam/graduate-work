@@ -76,12 +76,12 @@ public class AdsController {
     @GetMapping()
     public ResponseEntity<?> allAd() {
 
-        var res = advertisementServ.allAd();
+        ValueFromMethod<Ads> res = advertisementServ.allAd();
         if (!res.RESULT) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
 
-        return ResponseEntity.ok(res.VALUE);
+        return ResponseEntity.ok(res.getValue());
     }
 
     @GetMapping("{id}")

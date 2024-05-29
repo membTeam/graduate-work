@@ -30,28 +30,23 @@ public class AdvertisementServiceImpl  implements AdvertisementService {
     private final UserUtils userUtils;
 
 
-    private ValueFromMethod initResultError(String strErr) {
-        log.error(strErr);
-        return new ValueFromMethod(false, strErr);
-    }
-
     private ValueFromMethod<Advertisement> verifyUser(Integer advId) {
 
         ValueFromMethod<User> resFromUserUtils = userUtils.getUserByUsername();
 
         if (!resFromUserUtils.RESULT) {
-            return initResultError(resFromUserUtils.MESSAGE);
+            return ValueFromMethod.resultErr(resFromUserUtils.MESSAGE);
         }
 
         var resFind = advRepository.findById(advId);
         if (!resFind.isPresent()) {
-            return initResultError("updateImageAd: Объявление не найдено");
+            return ValueFromMethod.resultErr("updateImageAd: Объявление не найдено");
         }
 
         var adv = resFind.orElseThrow();
 
         if (resFromUserUtils.VALUE.getRole() == Role.USER && !adv.getUserId().equals(resFromUserUtils.VALUE.getId())) {
-            return initResultError("updateImageAd: Только автор объявления может вносить изменения");
+            return ValueFromMethod.resultErr("updateImageAd: Только автор объявления может вносить изменения");
         }
 
         return new ValueFromMethod(adv);
@@ -95,7 +90,7 @@ public class AdvertisementServiceImpl  implements AdvertisementService {
             return false;
         }
 
-        var adv = resVerifyUser.VALUE;
+        var adv = resVerifyUser.getValue();
 
         adv.setTitle(ad.getTitle());
         adv.setPrice(ad.getPrice());
@@ -167,9 +162,9 @@ public class AdvertisementServiceImpl  implements AdvertisementService {
     }
 
     @Override
-    public ValueFromMethod allAd() {
+    public ValueFromMethod<Ads> allAd() {
 
-        var ads = initAds(advRepository.findAll());
+        Ads ads = initAds(advRepository.findAll());
 
         return new ValueFromMethod(ads);
     }

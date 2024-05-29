@@ -12,6 +12,7 @@ import ru.skypro.homework.dto.Role;
 import ru.skypro.homework.enitities.Advertisement;
 import ru.skypro.homework.enitities.User;
 import ru.skypro.homework.repositories.AdvertisementRepository;
+import ru.skypro.homework.repositories.CommentRepository;
 import ru.skypro.homework.service.AdvertisementService;
 import ru.skypro.homework.utils.UserUtils;
 import ru.skypro.homework.utils.ValueFromMethod;
@@ -25,6 +26,7 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class AdvertisementServiceImpl  implements AdvertisementService {
+    private final CommentRepository commentRepository;
 
     private final AdvertisementRepository advRepository;
     private final UserUtils userUtils;
@@ -78,15 +80,27 @@ public class AdvertisementServiceImpl  implements AdvertisementService {
 
 
     @Override
+    @Transactional
     public boolean deleteAd(Integer advId) {
-        var resVerifyUser = verifyUser(advId);
+        try {
+            var resVerifyUser = verifyUser(advId);
+            if (!resVerifyUser.RESULT) {
+                throw new IllegalArgumentException(resVerifyUser.MESSAGE)
+            }
 
-        if (!resVerifyUser.RESULT) {
+            var lsComm = commentRepository.findByAdId(advId);
+            if (lsComm.size() > 0) {
+                commentRepository.deleteAll(lsComm);
+            }
+
+            advRepository.deleteById(advId);
+
+            return true;
+
+        } catch (Exception ex) {
+            ValueFromMethod.resultErr("deleteAd: " + ex.getMessage());
             return false;
         }
-
-        advRepository.deleteById(advId);
-        return true;
     }
 
     @Override

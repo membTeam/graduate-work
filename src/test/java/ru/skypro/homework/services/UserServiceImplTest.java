@@ -18,6 +18,7 @@ import ru.skypro.homework.repositories.UserRepository;
 import ru.skypro.homework.service.impl.UserServiceImpl;
 import ru.skypro.homework.utils.FileAPI;
 import ru.skypro.homework.utils.UserUtils;
+import ru.skypro.homework.utils.ValueFromMethod;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -39,9 +40,6 @@ public class UserServiceImplTest {
     private PasswordEncoder encoder;
 
     @Autowired
-    private UserUtils userUtils;
-
-    @Autowired
     private UserServiceImpl userServiceImpl;
 
     @MockBean
@@ -50,6 +48,8 @@ public class UserServiceImplTest {
     @MockBean
     private UserRepository userRepo;
 
+    @MockBean
+    private UserUtils userUtils;
 
     @Test
     public void setImage() throws IOException {
@@ -80,6 +80,7 @@ public class UserServiceImplTest {
 
         when(userRepo.getDefaultUser()).thenReturn(user);
         when(userAvatarRepo.save(any(UserAvatar.class))).thenReturn(userAvatarAfterSave);
+        when(userUtils.getUserByUsername()).thenReturn(new ValueFromMethod(user));
 
         assertTrue(userServiceImpl.setImage(file));
 
@@ -112,6 +113,7 @@ public class UserServiceImplTest {
 
         when(userRepo.getDefaultUser()).thenReturn(user);
         when(userAvatarRepo.findById(user.getId())).thenReturn(Optional.empty());
+        when(userUtils.getUserByUsername()).thenReturn(new ValueFromMethod(user));
 
         var res = userServiceImpl.getMyInfo();
 
@@ -140,6 +142,7 @@ public class UserServiceImplTest {
 
         when(userRepo.getDefaultUser()).thenReturn(user);
         when(userRepo.save(any(User.class))).thenReturn(userSave);
+        when(userUtils.getUserByUsername()).thenReturn(new ValueFromMethod(user));
 
         var result = userServiceImpl.setPassword(newPassword);
         assertTrue(result.RESULT);
@@ -166,6 +169,7 @@ public class UserServiceImplTest {
 
         when(userRepo.getDefaultUser()).thenReturn(user);
         when(userRepo.save(any(User.class))).thenReturn(userSave);
+        when(userUtils.getUserByUsername()).thenReturn(new ValueFromMethod(user));
 
         var result = userServiceImpl.updateUser(updUser);
 

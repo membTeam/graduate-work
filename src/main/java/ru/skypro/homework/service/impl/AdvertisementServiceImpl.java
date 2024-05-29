@@ -32,24 +32,32 @@ public class AdvertisementServiceImpl  implements AdvertisementService {
 
     private ValueFromMethod<Advertisement> verifyUser(Integer advId) {
 
-        ValueFromMethod<User> resFromUserUtils = userUtils.getUserByUsername();
+        try {
 
-        if (!resFromUserUtils.RESULT) {
-            return ValueFromMethod.resultErr(resFromUserUtils.MESSAGE);
+            ValueFromMethod<User> resFromUserUtils = userUtils.getUserByUsername();
+
+            if (!resFromUserUtils.RESULT) {
+                throw new Exception(resFromUserUtils.MESSAGE);
+            }
+
+            var resFindAdv = advRepository.findById(advId);
+            if (!resFindAdv.isPresent()) {
+                throw new IllegalArgumentException("updateImageAd: Объявление не найдено");
+            }
+
+            var adv = resFindAdv.orElseThrow();
+            var userCurr = resFromUserUtils.getValue();
+
+            if (!userCurr.getId().equals(adv.getUserId()) && !userCurr.getRole().equals(Role.ADMIN)) {
+                throw new IllegalArgumentException("updateImageAd: Только автор объявления может вносить изменения");
+            }
+
+            return new ValueFromMethod(adv);
+
+        } catch (Exception ex) {
+            return ValueFromMethod.resultErr(ex.getMessage());
         }
 
-        var resFind = advRepository.findById(advId);
-        if (!resFind.isPresent()) {
-            return ValueFromMethod.resultErr("updateImageAd: Объявление не найдено");
-        }
-
-        var adv = resFind.orElseThrow();
-
-        if (resFromUserUtils.VALUE.getRole() == Role.USER && !adv.getUserId().equals(resFromUserUtils.VALUE.getId())) {
-            return ValueFromMethod.resultErr("updateImageAd: Только автор объявления может вносить изменения");
-        }
-
-        return new ValueFromMethod(adv);
     }
 
     private Ads initAds(List<Advertisement> lsAdv) {

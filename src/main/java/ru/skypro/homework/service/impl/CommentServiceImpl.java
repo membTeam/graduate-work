@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.yaml.snakeyaml.events.CommentEvent;
 import ru.skypro.homework.dto.Comment;
 import ru.skypro.homework.dto.CommentAdd;
 import ru.skypro.homework.dto.Comments;
@@ -35,11 +36,6 @@ public class CommentServiceImpl implements CommentService {
     private final UserUtils userUtils;
 
 
-    private ValueFromMethod initResultError(String strErr) {
-        log.error(strErr);
-        return new ValueFromMethod(false, strErr);
-    }
-
     private Comment initComment(CommentEnt comment, User user) {
             var userAvatar = userAvatarRepo.findById(user.getId());
             var image = userAvatar.isEmpty() ? "/img/avatar/empty" : userAvatar.orElseThrow().getImage();
@@ -54,23 +50,30 @@ public class CommentServiceImpl implements CommentService {
                     .build();
     }
 
-    private String getImageAvatar(Integer userId) {
+    private ValueFromMethod<CommentEnt> verifyUser(Integer commentId) {
+
         try {
-            var userAvatar = userAvatarRepo.findById(userId).orElseThrow();
-            return userAvatar.getImage();
+            var user = userUtils.getUserByUsername().getValue();
+
+            var commentEnt = commentRepo.findById(commentId).orElseThrow();
+
+            if (!user.getId().equals(commentEnt.getUserId()) && !user.getRole().equals(Role.ADMIN)) {
+                throw new Exception("updateImageAd: Только автор объявления может вносить изменения");
+            }
+
+            return new ValueFromMethod(commentEnt);
 
         } catch (Exception ex) {
-            return "/img/avatar/empty";
+            return ValueFromMethod.resultErr(ex.getMessage());
         }
     }
+
 
     @Override
     public ValueFromMethod<Comments> getCommentsByAdvId(Integer id) {
 
         try {
-
             var lsComments = commentRepo.getCommentsByAdvertisement(id);
-
             var results = lsComments.stream().map(item ->
                     Comment.builder()
                             .author((Integer) item.get(0))
@@ -90,8 +93,7 @@ public class CommentServiceImpl implements CommentService {
             return new ValueFromMethod(comments);
 
         } catch (Exception ex) {
-            log.error(ex.getMessage());
-            return new ValueFromMethod(ex.getMessage());
+            return ValueFromMethod.resultErr(ex.getMessage());
         }
     }
 
@@ -117,7 +119,7 @@ public class CommentServiceImpl implements CommentService {
             return new ValueFromMethod(commRes);
 
         } catch (Exception ex) {
-            return initResultError("addComment " + ex.getMessage());
+            return ValueFromMethod.resultErr(ex.getMessage());
         }
     }
 
@@ -125,18 +127,27 @@ public class CommentServiceImpl implements CommentService {
     public ValueFromMethod<Comment> updateCommentForId(Integer id, CommentAdd commentAdd) {
 
         try {
-            var commFind = commentRepo.findById(id).orElseThrow();
-            var user = userRepo.findById(commFind.getUserId()).orElseThrow();
+            var resVerify = verifyUser(id);
+            if (!resVerify.RESULT) {
+                throw new Exception(resVerify.MESSAGE);
+            }
 
-            commFind.setText(commentAdd.getText());
+            var commentEnt = resVerify.getValue();
+            if (commentEnt.getText().equals(commentAdd.getText())) {
+                throw new IllegalArgumentException("Повторный ввод комментария");
+            }
 
-            var resSave = commentRepo.save(commFind);
-            var commRes = initComment(resSave, user);
+            var user = userRepo.findById(commentEnt.getUserId()).orElseThrow();
+
+            commentEnt.setText(commentAdd.getText());
+            commentRepo.save(commentEnt);
+
+            var commRes = initComment(commentEnt, user);
 
             return new ValueFromMethod(commRes);
 
         } catch (Exception ex) {
-            return initResultError("updateCommentForId: " + ex.getMessage());
+            return ValueFromMethod.resultErr(ex.getMessage());
         }
 
     }
@@ -144,23 +155,17 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public ValueFromMethod<Comment> deleteComment(Integer adId, Integer commentId) {
         try {
-            var commFind = commentRepo.findById(commentId).orElseThrow();
-            var user = userUtils.getUserByUsername().getValue();
-
-            if (user == null) {
-                throw new UsernameNotFoundException("Нет пользователя");
+            var resVerify = verifyUser(commentId);
+            if (!resVerify.RESULT) {
+                throw new Exception(resVerify.MESSAGE);
             }
 
-            if ( !commFind.getUserId().equals(user.getId()) && user.getRole() != Role.ADMIN ) {
-                throw new IllegalArgumentException("Только автор комментария или администратор могут удалить");
-            }
-
-            commentRepo.deleteById(commFind.getId());
+            commentRepo.deleteById(resVerify.getValue().getId());
 
             return ValueFromMethod.resultOk();
 
         } catch (Exception ex) {
-            return initResultError("deleteComment: " + ex.getMessage());
+            return ValueFromMethod.resultErr(ex.getMessage());
         }
     }
 }

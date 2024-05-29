@@ -2,6 +2,7 @@ package ru.skypro.homework.services;
 
 
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -30,6 +31,8 @@ import ru.skypro.homework.repositories.UserAvatarRepository;
 import ru.skypro.homework.repositories.UserRepository;
 import ru.skypro.homework.service.AdvertisementService;
 import ru.skypro.homework.utils.FileAPI;
+import ru.skypro.homework.utils.UserUtils;
+import ru.skypro.homework.utils.ValueFromMethod;
 
 
 @SpringBootTest
@@ -50,6 +53,10 @@ public class AdvertisementServiceTest {
     @MockBean
     private UserAvatarRepository userAvatarRepo;
 
+    @MockBean
+    private UserUtils userUtils;
+
+
     @Test
     public void deleteAd() {
 
@@ -63,6 +70,7 @@ public class AdvertisementServiceTest {
                 .build();
 
         when(userRepo.getDefaultUser()).thenReturn(user);
+        when(userUtils.getUserByUsername()).thenReturn(new ValueFromMethod(user));
         when(advertisementRepo.findById(any(Integer.class))).thenReturn(Optional.ofNullable(adv));
         doNothing().when(advertisementRepo).deleteById(any(Integer.class));
 
@@ -94,6 +102,7 @@ public class AdvertisementServiceTest {
                 .build();
 
         when(userRepo.getDefaultUser()).thenReturn(user);
+        when(userUtils.getUserByUsername()).thenReturn(new ValueFromMethod(user));
         when(advertisementRepo.findById(any(Integer.class))).thenReturn(Optional.ofNullable(advEnt));
         when(advertisementRepo.save(any(Advertisement.class))).thenReturn(advSaveEnt);
 
@@ -135,6 +144,7 @@ public class AdvertisementServiceTest {
         );
 
         when(userRepo.getDefaultUser()).thenReturn(user);
+        when(userUtils.getUserByUsername()).thenReturn(new ValueFromMethod(user));
         when(userAvatarRepo.save(any(UserAvatar.class))).thenReturn(userAvatarAfterSave);
         when(advertisementRepo.findById(any(Integer.class))).thenReturn(Optional.ofNullable(advEnt));
 
@@ -183,6 +193,7 @@ public class AdvertisementServiceTest {
         );
 
         when(userRepo.getDefaultUser()).thenReturn(user);
+        when(userUtils.getUserByUsername()).thenReturn(new ValueFromMethod(user));
         when(advertisementRepo.save(any(Advertisement.class))).thenReturn(advAfterSave);
         when(advertisementRepo.findById(any(Integer.class))).thenReturn(Optional.ofNullable(advEnt));
 

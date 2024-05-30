@@ -85,7 +85,7 @@ public class AdvertisementServiceImpl  implements AdvertisementService {
         try {
             var resVerifyUser = verifyUser(advId);
             if (!resVerifyUser.RESULT) {
-                throw new IllegalArgumentException(resVerifyUser.MESSAGE)
+                throw new IllegalArgumentException(resVerifyUser.MESSAGE);
             }
 
             var lsComm = commentRepository.findByAdId(advId);

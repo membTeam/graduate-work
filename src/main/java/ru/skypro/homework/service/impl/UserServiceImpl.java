@@ -1,10 +1,7 @@
 package ru.skypro.homework.service.impl;
 
 
-import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -86,6 +83,10 @@ public class UserServiceImpl implements UserSerive {
             var hashId = user.getId().toString().hashCode();
             var strImage = String.format("/img/avatar/avatar-%d", hashId);
 
+            if (userAvatarRepo.existsImgAvatar(strImage)) {
+                throw new IllegalArgumentException("Повторный ввод image аватара");
+            }
+
             UserAvatar userAvatar = UserAvatar.builder()
                     .user(user)
                     .fileSize(image.getSize())
@@ -94,7 +95,7 @@ public class UserServiceImpl implements UserSerive {
                     .data(image.getBytes())
                     .build();
 
-            if ((userAvatarRepo.findById(user.getId()).isPresent() )) {
+            if (userAvatarRepo.existsUserAvatar(user.getId())) {
                 userAvatarRepo.deleteById(user.getId());
             }
 
@@ -102,7 +103,7 @@ public class UserServiceImpl implements UserSerive {
             return true;
 
         } catch (Exception ex) {
-            log.error("setImage: " + ex.getMessage());
+            ValueFromMethod.resultErr("setImage: " + ex.getMessage());
             return false;
         }
     }

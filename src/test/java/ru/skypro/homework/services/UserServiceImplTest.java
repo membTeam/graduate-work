@@ -24,11 +24,10 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
-
 
 @SpringBootTest
 public class UserServiceImplTest {
@@ -51,9 +50,10 @@ public class UserServiceImplTest {
     @MockBean
     private UserUtils userUtils;
 
+
     @Test
-    public void setImage() throws IOException {
-        var strFile = "avatar-default.png";
+    public void setImage_existsImageAvatar() throws IOException {
+        var strFile = "avatar.png";
 
         var pathPhoto = fileAPI.getPathDirImage().resolve(strFile);
         var user = User.builder()
@@ -80,10 +80,49 @@ public class UserServiceImplTest {
 
         when(userRepo.getDefaultUser()).thenReturn(user);
         when(userAvatarRepo.save(any(UserAvatar.class))).thenReturn(userAvatarAfterSave);
+        when(userAvatarRepo.existsImgAvatar(any(String.class))).thenReturn(true);
+        when(userUtils.getUserByUsername()).thenReturn(new ValueFromMethod(user));
+        doNothing().when(userAvatarRepo).deleteById(any(Integer.class));
+
+        assertFalse(userServiceImpl.setImage(file));
+    }
+
+
+    @Test
+    public void setImage_notExistsImageAvatar() throws IOException {
+        var strFile = "avatar-default.png";
+
+        var pathPhoto = fileAPI.getPathDirImage().resolve(strFile);
+        var user = User.builder()
+                .id(1)
+                .role(Role.USER)
+                .build();
+
+        var hashId = user.getId().toString().hashCode();
+        var strImage = String.format("/img/avatar/avatar-%d", hashId);
+
+        var userAvatarAfterSave = UserAvatar.builder()
+                .id(1)
+                .image(strImage)
+                .build();
+
+        byte[] data = Files.readAllBytes(pathPhoto);
+
+        MockMultipartFile file = new MockMultipartFile(
+                "file",
+                String.valueOf(pathPhoto.getFileName()),
+                String.valueOf(MediaType.IMAGE_PNG),
+                data
+        );
+
         when(userUtils.getUserByUsername()).thenReturn(new ValueFromMethod(user));
 
-        assertTrue(userServiceImpl.setImage(file));
+        when(userAvatarRepo.existsUserAvatar(any(Integer.class))).thenReturn(false);
+        when(userAvatarRepo.existsImgAvatar(any(String.class))).thenReturn(false);
 
+        when(userAvatarRepo.save(any(UserAvatar.class))).thenReturn(userAvatarAfterSave);
+
+        assertTrue(userServiceImpl.setImage(file));
     }
 
     @Test

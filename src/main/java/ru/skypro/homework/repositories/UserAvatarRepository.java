@@ -10,10 +10,6 @@ public interface UserAvatarRepository extends JpaRepository<UserAvatar, Integer>
         @Query(value = "select exists(select * from user_avatar where id = :id)", nativeQuery = true)
         boolean existsUserAvatar(Integer id);
 
-        //@Query(value = "select count(*) from UserAvatar where image = :image")
-/*        @Query("select exists(select * from user_avatar where image like (:image));")
-        boolean existsUserAvatarByString(String image);*/
-
         @Query(value = "select exists(select * from user_avatar where image = :image)", nativeQuery = true)
         boolean existsImgAvatar(String image);
 

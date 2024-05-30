@@ -1,6 +1,7 @@
 package ru.skypro.homework.service.impl;
 
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -21,7 +22,7 @@ import javax.transaction.Transactional;
 
 @Service
 @Log4j
-//@RequiredArgsConstructor
+@RequiredArgsConstructor
 public class UserServiceImpl implements UserSerive {
 
     private final UserRepository userRepo;
@@ -29,12 +30,6 @@ public class UserServiceImpl implements UserSerive {
     private final UserAvatarRepository userAvatarRepo;
     private final PasswordEncoder encoder;
 
-    public UserServiceImpl(UserRepository userRepo, UserUtils userUtils, UserAvatarRepository userAvatarRepo, PasswordEncoder encoder) {
-        this.userRepo = userRepo;
-        this.userUtils = userUtils;
-        this.userAvatarRepo = userAvatarRepo;
-        this.encoder = encoder;
-    }
 
     @Override
     public ValueFromMethod<UserDTO> getMyInfo() {

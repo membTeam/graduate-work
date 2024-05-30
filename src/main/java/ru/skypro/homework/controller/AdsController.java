@@ -122,7 +122,7 @@ public class AdsController {
      * @param id
      * @return
      */
-    @GetMapping("{id}")
+    /*@GetMapping("{id}")
     public ResponseEntity<?> detailsAd(@PathVariable Integer id) {
         UserDTO user = UserDTO.builder()
                 .id(0)
@@ -135,7 +135,7 @@ public class AdsController {
                 .build();
 
         return ResponseEntity.ok(user);
-    }
+    }*/
 
     /**
      * Конечная точка объявлений, созданных пользователем

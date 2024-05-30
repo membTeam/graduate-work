@@ -13,7 +13,9 @@ import ru.skypro.homework.service.CommentService;
 import ru.skypro.homework.utils.UserUtils;
 import ru.skypro.homework.utils.ValueFromMethod;
 
-
+/**
+ * Контроллер объявлений
+ */
 @CrossOrigin(value = "http://localhost:3000")
 @RestController
 @RequestMapping("/ads")
@@ -26,6 +28,12 @@ public class AdsController {
 
     // -----------------------------------
 
+    /**
+     * Конечная точка удаления комментария
+     * @param adId
+     * @param commentId
+     * @return
+     */
     @DeleteMapping("{adId}/comments/{commentId}")
     public ResponseEntity<?> deleteComment(@PathVariable Integer adId, @PathVariable Integer commentId) {
         ValueFromMethod<Comment> resData = commentService.deleteComment(adId, commentId);
@@ -36,6 +44,13 @@ public class AdsController {
         return ResponseEntity.ok().build();
     }
 
+
+    /**
+     * Конечная точка добавления комментария
+     * @param id
+     * @param comment
+     * @return
+     */
     @PostMapping("{id}/comments")
     public ResponseEntity addComment(@PathVariable Integer id, @RequestBody CommentAdd comment ) {
 
@@ -48,6 +63,12 @@ public class AdsController {
         return ResponseEntity.ok(resData.VALUE);
     }
 
+
+    /**
+     * Конечная точка комментариев по заданному id объявления
+     * @param id
+     * @return
+     */
     @GetMapping("{id}/comments")
     public ResponseEntity<?> getCommentsForId(@PathVariable Integer id) {
        ValueFromMethod<Comments> resData = commentService.getCommentsByAdvId(id);
@@ -59,6 +80,12 @@ public class AdsController {
         return ResponseEntity.ok(resData.VALUE);
     }
 
+    /**
+     * Конечная точка изменения текста комментария
+     * @param id
+     * @param comment
+     * @return
+     */
     @PatchMapping("{id}/comments")
     public ResponseEntity<?> updateCommentForId(@PathVariable Integer id, @RequestBody CommentAdd comment) {
         ValueFromMethod<Comment> resData = commentService.updateCommentForId(id, comment);
@@ -73,6 +100,10 @@ public class AdsController {
 
     // -----------------------------------
 
+    /**
+     * Конечная точка получения список ВСЕХ объявлений
+     * @return
+     */
     @GetMapping()
     public ResponseEntity<?> allAd() {
 
@@ -84,6 +115,11 @@ public class AdsController {
         return ResponseEntity.ok(res.getValue());
     }
 
+    /**
+     * Конечная точка удаления объявления. Учитывается роль пользователя
+     * @param id
+     * @return
+     */
     @GetMapping("{id}")
     public ResponseEntity<?> detailsAd(@PathVariable Integer id) {
         UserDTO user = UserDTO.builder()
@@ -99,6 +135,10 @@ public class AdsController {
         return ResponseEntity.ok(user);
     }
 
+    /**
+     * Конечная точка объявлений, созданных пользователем
+     * @return
+     */
     @GetMapping("me")
     public ResponseEntity<?> adForUser() {
 
@@ -110,6 +150,12 @@ public class AdsController {
         return ResponseEntity.ok(res.VALUE);
     }
 
+    /**
+     * Конечная точка добавления объявления
+     * @param adv
+     * @param image
+     * @return
+     */
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> addAds(@RequestPart("properties") Adv adv,
                              @RequestPart("image") MultipartFile image) {
@@ -121,6 +167,12 @@ public class AdsController {
         return ResponseEntity.ok().build();
     }
 
+    /**
+     * Конечная точка изменения фотографии объявления
+     * @param id
+     * @param image
+     * @return
+     */
     @PatchMapping(value = "{id}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> updateImageAd(@PathVariable Integer id, @RequestParam MultipartFile image) {
 
@@ -131,6 +183,12 @@ public class AdsController {
         return ResponseEntity.ok().build();
     }
 
+    /**
+     * Конечная точка изменения объявления
+     * @param id
+     * @param adv
+     * @return
+     */
     @PatchMapping("{id}")
     public ResponseEntity<?> updateAd(@PathVariable Integer id, @RequestBody Adv adv) {
         if (!advertisementServ.updateAd(id, adv)) {
@@ -140,6 +198,11 @@ public class AdsController {
         return ResponseEntity.ok().build();
     }
 
+    /**
+     * Конечная точка удаления объявления. Учитывается роль пользователяы
+     * @param id
+     * @return
+     */
     @DeleteMapping("{id}")
     public ResponseEntity<?> deleteAd(@PathVariable Integer id) {
         if (!advertisementServ.deleteAd(id)) {

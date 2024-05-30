@@ -13,7 +13,9 @@ import ru.skypro.homework.repositories.UserRepository;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
-
+/**
+ * Класс управления base Authorisation
+ */
 @Configuration
 public class WebSecurityConfig {
 
@@ -27,6 +29,11 @@ public class WebSecurityConfig {
             "/img/**"
     };
 
+    /**
+     * UserDetailsService > функциональный интерфейс по username. Возвращает структуру авторизованного пользователя
+     * @param userRepo
+     * @return
+     */
     @Bean
     public UserDetailsService userDetailsService(UserRepository userRepo) {
         return username -> {
@@ -39,6 +46,12 @@ public class WebSecurityConfig {
         };
     }
 
+    /**
+     * Фильтр запросов, управляемый base Authorisation
+     * @param http
+     * @return
+     * @throws Exception
+     */
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.csrf()

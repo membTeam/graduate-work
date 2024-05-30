@@ -11,7 +11,7 @@ public interface CommentService {
 
     ValueFromMethod<Comment> addComment(Integer adId, CommentAdd comment);
 
-    ValueFromMethod<Comment> updateCommentForId(Integer id, CommentAdd commentAdd);
+    ValueFromMethod<Comment> updateCommentForId(Integer id, Integer commentId, CommentAdd commentAdd);
 
     ValueFromMethod<Comment> deleteComment(Integer adId, Integer commentId);
 }

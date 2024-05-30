@@ -2,16 +2,13 @@ package ru.skypro.homework.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import org.yaml.snakeyaml.events.CommentEvent;
 import ru.skypro.homework.dto.Comment;
 import ru.skypro.homework.dto.CommentAdd;
 import ru.skypro.homework.dto.Comments;
 import ru.skypro.homework.dto.Role;
 import ru.skypro.homework.enitities.CommentEnt;
 import ru.skypro.homework.enitities.User;
-import ru.skypro.homework.enitities.UserAvatar;
 import ru.skypro.homework.repositories.AdvertisementRepository;
 import ru.skypro.homework.repositories.CommentRepository;
 import ru.skypro.homework.repositories.UserAvatarRepository;
@@ -124,10 +121,10 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public ValueFromMethod<Comment> updateCommentForId(Integer id, CommentAdd commentAdd) {
+    public ValueFromMethod<Comment> updateCommentForId(Integer id, Integer commentId, CommentAdd commentAdd) {
 
         try {
-            var resVerify = verifyUser(id);
+            var resVerify = verifyUser(commentId);
             if (!resVerify.RESULT) {
                 throw new Exception(resVerify.MESSAGE);
             }

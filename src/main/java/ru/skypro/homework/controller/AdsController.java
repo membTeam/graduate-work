@@ -82,13 +82,15 @@ public class AdsController {
 
     /**
      * Конечная точка изменения текста комментария
-     * @param id
+     * @param adId
      * @param comment
      * @return
      */
-    @PatchMapping("{id}/comments")
-    public ResponseEntity<?> updateCommentForId(@PathVariable Integer id, @RequestBody CommentAdd comment) {
-        ValueFromMethod<Comment> resData = commentService.updateCommentForId(id, comment);
+    @PatchMapping("{adId}/comments/{commentId}")
+    public ResponseEntity<?> updateCommentForId(@PathVariable Integer adId,
+                                                @PathVariable Integer commentId,
+                                                @RequestBody CommentAdd comment) {
+        ValueFromMethod<Comment> resData = commentService.updateCommentForId(adId, commentId, comment);
 
         if (!resData.RESULT) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();

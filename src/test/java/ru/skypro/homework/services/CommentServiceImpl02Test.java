@@ -9,7 +9,6 @@ import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -113,7 +112,7 @@ public class CommentServiceImpl02Test {
         when(commentRepo.save(any(CommentEnt.class))).thenReturn(commentEntSave);
         when(userRepo.findById(any(Integer.class))).thenReturn(Optional.ofNullable(user));
 
-        var result = commentService.updateCommentForId(1, commentUpdate);
+        var result = commentService.updateCommentForId(1, 1, commentUpdate);
 
         assertTrue(result.RESULT);
 
@@ -154,7 +153,7 @@ public class CommentServiceImpl02Test {
         when(commentRepo.findById(any(Integer.class))).thenReturn(Optional.ofNullable(commentEnt));
         when(userRepo.findById(any(Integer.class))).thenReturn(Optional.ofNullable(user));
 
-        var result = commentService.updateCommentForId(1, commentUpdate);
+        var result = commentService.updateCommentForId(1, 1, commentUpdate);
 
         assertFalse(result.RESULT);
 
@@ -193,7 +192,7 @@ public class CommentServiceImpl02Test {
         when(commentRepo.findById(any(Integer.class))).thenReturn(Optional.ofNullable(commentEnt));
         when(userRepo.findById(any(Integer.class))).thenReturn(Optional.ofNullable(user));
 
-        var result = commentService.updateCommentForId(1, commentUpdate);
+        var result = commentService.updateCommentForId(1, 1, commentUpdate);
 
         assertFalse(result.RESULT);
 

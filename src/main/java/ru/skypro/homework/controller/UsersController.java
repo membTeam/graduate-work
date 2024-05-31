@@ -25,7 +25,7 @@ public class UsersController {
 
     private final UserSerive userSerive;
 
-    @PostMapping("set-password")
+    @PostMapping("set_password")
     public ResponseEntity<?> setPassword(@RequestBody NewPassword newPassword) {
 
         if (!userSerive.setPassword(newPassword).RESULT) {

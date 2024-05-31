@@ -15,6 +15,9 @@ public class CommentRepositoryTest {
     @Autowired
     private CommentRepository commentRepo;
 
+    @Autowired
+    private AdvertisementRepository advertisementRepo;
+
     @Test
     public void getCommentsByUserId() {
         var res = commentRepo.getCommentsByAdvertisement(1);
@@ -24,7 +27,10 @@ public class CommentRepositoryTest {
 
     @Test
     public void getCommentByUserId_forObj() {
-        var lsComments = commentRepo.getCommentsByAdvertisement(8);
+
+        var adId = commentRepo.findAll().get(0).getAdId();
+
+        var lsComments = commentRepo.getCommentsByAdvertisement(adId);
 
         var results = lsComments.stream().map(item ->
                 Comment.builder()
@@ -44,7 +50,8 @@ public class CommentRepositoryTest {
     @Test
     public void getListCommentByAdId() {
 
-        var resLs = commentRepo.getListCommentByAdId(8);
+        var adId = commentRepo.findAll().get(0).getAdId();
+        var resLs = commentRepo.getListCommentByAdId(adId);
 
         assertTrue(resLs.size() > 0);
     }

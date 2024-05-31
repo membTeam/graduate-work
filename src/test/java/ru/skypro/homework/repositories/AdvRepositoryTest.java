@@ -15,7 +15,9 @@ public class AdvRepositoryTest {
 
     @Test
     public void findByImage() {
-        var res = advertisementRepo.findByImage("/img-1422027750-televisor");
+
+        var ad = advertisementRepo.findAll().get(0);
+        var res = advertisementRepo.findByImage(ad.getImage());
 
         assertTrue(res.isPresent());
     }

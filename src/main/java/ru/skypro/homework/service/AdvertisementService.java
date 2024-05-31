@@ -21,6 +21,8 @@ public interface AdvertisementService {
 
     ValueFromMethod allAd();
 
+    ValueFromMethod detailsAd(Integer advId);
+
 
 /*    @Transactional
     boolean addAd(Adv adv);*/

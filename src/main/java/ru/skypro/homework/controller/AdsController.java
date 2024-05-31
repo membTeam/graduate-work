@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.*;
+import ru.skypro.homework.repositories.UserRepository;
 import ru.skypro.homework.service.AdvertisementService;
 import ru.skypro.homework.service.CommentService;
 import ru.skypro.homework.utils.UserUtils;
@@ -25,6 +26,7 @@ public class AdsController {
     private final UserUtils userUtils;
     private final AdvertisementService advertisementServ;
     private final CommentService commentService;
+    private final UserRepository userRepository;
 
     // -----------------------------------
 
@@ -122,20 +124,15 @@ public class AdsController {
      * @param id
      * @return
      */
-    /*@GetMapping("{id}")
+    @GetMapping("{id}")
     public ResponseEntity<?> detailsAd(@PathVariable Integer id) {
-        UserDTO user = UserDTO.builder()
-                .id(0)
-                .phone("+7")
-                .role("USER")
-                .email("any@mail.ru")
-                .image("imaleFile")
-                .firstName("firstName")
-                .lastName("lastName")
-                .build();
+        var res = advertisementServ.detailsAd(id);
+        if (!res.RESULT) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
 
-        return ResponseEntity.ok(user);
-    }*/
+        return ResponseEntity.ok(res.getValue());
+    }
 
     /**
      * Конечная точка объявлений, созданных пользователем

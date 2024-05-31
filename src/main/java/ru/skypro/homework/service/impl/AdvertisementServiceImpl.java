@@ -4,15 +4,14 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import ru.skypro.homework.dto.Adv;
-import ru.skypro.homework.dto.Ad;
-import ru.skypro.homework.dto.Ads;
+import ru.skypro.homework.dto.*;
 
-import ru.skypro.homework.dto.Role;
 import ru.skypro.homework.enitities.Advertisement;
 import ru.skypro.homework.enitities.User;
 import ru.skypro.homework.repositories.AdvertisementRepository;
 import ru.skypro.homework.repositories.CommentRepository;
+import ru.skypro.homework.repositories.UserAvatarRepository;
+import ru.skypro.homework.repositories.UserRepository;
 import ru.skypro.homework.service.AdvertisementService;
 import ru.skypro.homework.utils.UserUtils;
 import ru.skypro.homework.utils.ValueFromMethod;
@@ -26,9 +25,11 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class AdvertisementServiceImpl  implements AdvertisementService {
+    private final UserAvatarRepository userAvatarRepo;
+    private final UserRepository userRepo;
     private final CommentRepository commentRepository;
 
-    private final AdvertisementRepository advRepository;
+    private final AdvertisementRepository advRepo;
     private final UserUtils userUtils;
 
 
@@ -42,7 +43,7 @@ public class AdvertisementServiceImpl  implements AdvertisementService {
                 throw new Exception(resFromUserUtils.MESSAGE);
             }
 
-            var resFindAdv = advRepository.findById(advId);
+            var resFindAdv = advRepo.findById(advId);
             if (!resFindAdv.isPresent()) {
                 throw new IllegalArgumentException("updateImageAd: Объявление не найдено");
             }
@@ -93,7 +94,7 @@ public class AdvertisementServiceImpl  implements AdvertisementService {
                 commentRepository.deleteAll(lsComm);
             }
 
-            advRepository.deleteById(advId);
+            advRepo.deleteById(advId);
 
             return true;
 
@@ -118,7 +119,7 @@ public class AdvertisementServiceImpl  implements AdvertisementService {
         adv.setPrice(ad.getPrice());
         adv.setDescription(ad.getDescription());
 
-        advRepository.save(adv);
+        advRepo.save(adv);
 
         return true;
     }
@@ -134,7 +135,7 @@ public class AdvertisementServiceImpl  implements AdvertisementService {
 
         try {
             resVerifyUser.VALUE.setData(image.getBytes());
-            advRepository.save(resVerifyUser.VALUE);
+            advRepo.save(resVerifyUser.VALUE);
             return true;
 
         } catch (Exception ex) {
@@ -175,7 +176,7 @@ public class AdvertisementServiceImpl  implements AdvertisementService {
                     .user(user)
                     .build();
 
-            advRepository.save(advertisement);
+            advRepo.save(advertisement);
             return true;
         } catch (Exception ex) {
             log.error("addDev: " + ex.getMessage());
@@ -186,9 +187,36 @@ public class AdvertisementServiceImpl  implements AdvertisementService {
     @Override
     public ValueFromMethod<Ads> allAd() {
 
-        Ads ads = initAds(advRepository.findAll());
+        Ads ads = initAds(advRepo.findAll());
 
         return new ValueFromMethod(ads);
+    }
+
+    @Override
+    public ValueFromMethod<ExtendedAd> detailsAd(Integer advId) {
+
+        try {
+            var ad = advRepo.findById(advId).orElseThrow();
+            var user = userRepo.findById(ad.getUserId()).orElseThrow();
+
+            var extendedAd = ExtendedAd.builder()
+                    .pk(ad.getId())
+                    .authorFirstName(user.getFirstName())
+                    .authorLastName(user.getLastName())
+                    .description(ad.getDescription())
+                    .email(user.getEmail())
+                    .image(ad.getImage())
+                    .phone(user.getPhone())
+                    .price(ad.getPrice())
+                    .title(ad.getTitle())
+                    .build();
+
+            return new ValueFromMethod(extendedAd);
+
+        } catch (Exception ex) {
+            return ValueFromMethod.resultErr(ex.getMessage());
+        }
+
     }
 
     @Override
@@ -200,7 +228,7 @@ public class AdvertisementServiceImpl  implements AdvertisementService {
         }
 
         User user = fromUserUtils.VALUE;
-        Ads ads = initAds(advRepository.findAllAdv(user.getId()));
+        Ads ads = initAds(advRepo.findAllAdv(user.getId()));
 
         return new ValueFromMethod(ads);
     }

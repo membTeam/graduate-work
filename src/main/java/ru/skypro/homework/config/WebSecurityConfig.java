@@ -30,7 +30,7 @@ public class WebSecurityConfig {
     };
 
     /**
-     * UserDetailsService > функциональный интерфейс по username. Возвращает структуру авторизованного пользователя
+     * UserDetailsService > возращает детализацию пользователя по username
      * @param userRepo
      * @return
      */
@@ -71,6 +71,11 @@ public class WebSecurityConfig {
         return http.build();
     }
 
+
+    /**
+     * Кодировщик пароля
+     * @return
+     */
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();

@@ -11,6 +11,12 @@ import org.springframework.web.bind.annotation.RestController;
 import ru.skypro.homework.dto.WebResultPhoto;
 import ru.skypro.homework.service.ImgControllerService;
 
+
+/** <pre>контроллер снабжает
+ * пользователей аватарками
+ * объявления фотографиями
+ * </pre>
+ */
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/img")
@@ -18,6 +24,11 @@ public class ImgController {
 
     private final ImgControllerService imgControllerService;
 
+    /**
+     * image аватарок
+     * @param image
+     * @return
+     */
     @GetMapping("avatar/{image}")
     public ResponseEntity<byte[]> getImagAvatar(@PathVariable String image) {
         WebResultPhoto result = imgControllerService.getImageAvatar(image);
@@ -31,6 +42,12 @@ public class ImgController {
                 .body(result.getByteData());
     }
 
+
+    /**
+     * фотографии объявлений
+     * @param image
+     * @return
+     */
     @GetMapping("adv/{image}")
     public ResponseEntity<byte[]> getImagAdv(@PathVariable String image) {
         WebResultPhoto result = imgControllerService.getPhotoAdv(image);

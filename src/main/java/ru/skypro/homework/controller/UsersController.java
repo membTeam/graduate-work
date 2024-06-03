@@ -16,6 +16,14 @@ import ru.skypro.homework.enitities.User;
 import ru.skypro.homework.service.UserSerive;
 import ru.skypro.homework.utils.ValueFromMethod;
 
+
+/**<pre>Контроллер обработки данных пользователя:
+ * изменение пароля
+ * детализация пользователя
+ * изменение данных пользователя
+ * изменения аватарки
+ * </pre> *
+ */
 @Slf4j
 @RestController
 @CrossOrigin(value = "http://localhost:3000")
@@ -25,6 +33,11 @@ public class UsersController {
 
     private final UserSerive userSerive;
 
+    /**
+     * endPoint изменения пароля
+     * @param newPassword
+     * @return
+     */
     @PostMapping("set_password")
     public ResponseEntity<?> setPassword(@RequestBody NewPassword newPassword) {
 
@@ -35,6 +48,11 @@ public class UsersController {
         return ResponseEntity.ok().build();
     }
 
+    /**
+     * endPoint изменения данных пользователя
+     * @param updateUser
+     * @return
+     */
     @PatchMapping("me")
     public ResponseEntity<?> updateMe(@RequestBody UpdateUser updateUser) {
 
@@ -47,6 +65,14 @@ public class UsersController {
         return ResponseEntity.ok(resultUpdate.VALUE);
     }
 
+    /**
+     * <pre>endPoint выборка структуры данных пользователя:
+     * имя
+     * фамилия
+     * телефон
+     * </pre>
+     * @return
+     */
     @GetMapping("me")
     public ResponseEntity<?> me() {
         var resService = userSerive.getMyInfo();
@@ -58,6 +84,11 @@ public class UsersController {
         return ResponseEntity.ok(resService.VALUE);
     }
 
+    /**
+     *Изменение аватарки
+     * @param image
+     * @return
+     */
     @PatchMapping(value = "me/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> setImage(@RequestBody MultipartFile image) {
         if (!userSerive.setImage(image)) {

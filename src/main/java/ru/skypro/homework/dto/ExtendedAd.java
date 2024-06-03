@@ -6,6 +6,12 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+/**<pre>данные, связынных с объявлением
+ * Развернутая структура
+ * используется в AdvertisementServiceImpl
+ * </pre>
+
+ */
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor

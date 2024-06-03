@@ -1,20 +1,18 @@
 package ru.skypro.homework.controller;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.security.core.userdetails.UserDetails;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.NewPassword;
-
 import ru.skypro.homework.dto.UpdateUser;
-import ru.skypro.homework.enitities.User;
 import ru.skypro.homework.service.UserSerive;
-import ru.skypro.homework.utils.ValueFromMethod;
+
+import javax.validation.Valid;
 
 
 /**<pre>Контроллер обработки данных пользователя:
@@ -39,8 +37,12 @@ public class UsersController {
      * @return
      */
     @PostMapping("set_password")
-    public ResponseEntity<?> setPassword(@RequestBody NewPassword newPassword) {
+    public ResponseEntity<?> setPassword(@Valid @RequestBody NewPassword newPassword, Errors error) {
 
+        if (error.hasErrors()) {
+            log.error("setPassword " + error.getAllErrors().toString());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
         if (!userSerive.setPassword(newPassword).RESULT) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
@@ -54,7 +56,12 @@ public class UsersController {
      * @return
      */
     @PatchMapping("me")
-    public ResponseEntity<?> updateMe(@RequestBody UpdateUser updateUser) {
+    public ResponseEntity<?> updateMe(@Valid @RequestBody UpdateUser updateUser, Errors error) {
+
+        if (error.hasErrors()) {
+            log.error("updateMe: " + error.getAllErrors().toString());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
 
         var resultUpdate = userSerive.updateUser(updateUser);
 

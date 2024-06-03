@@ -5,6 +5,10 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
+
+/**
+ * Структура данных пользователя. Используется в UserController
+ */
 @Getter
 @Builder
 @AllArgsConstructor

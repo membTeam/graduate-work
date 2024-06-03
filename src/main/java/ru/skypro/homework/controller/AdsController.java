@@ -2,6 +2,8 @@ package ru.skypro.homework.controller;
 
 
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -35,6 +37,7 @@ import org.springframework.validation.Errors;
 @RequiredArgsConstructor
 public class AdsController {
 
+    private static final Logger log = LoggerFactory.getLogger(AdsController.class);
     private final UserUtils userUtils;
     private final AdvertisementService advertisementServ;
     private final CommentService commentService;
@@ -66,7 +69,11 @@ public class AdsController {
      * @return
      */
     @PostMapping("{id}/comments")
-    public ResponseEntity addComment(@PathVariable Integer id, @RequestBody CommentAdd comment ) {
+    public ResponseEntity addComment(@PathVariable Integer id, @Valid @RequestBody CommentAdd comment, Errors errors) {
+
+        if (errors.hasErrors()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
 
         ValueFromMethod<Comment> resData = commentService.addComment(id, comment);
 
@@ -103,7 +110,13 @@ public class AdsController {
     @PatchMapping("{adId}/comments/{commentId}")
     public ResponseEntity<?> updateCommentForId(@PathVariable Integer adId,
                                                 @PathVariable Integer commentId,
-                                                @RequestBody CommentAdd comment) {
+                                                @Valid @RequestBody CommentAdd comment, Errors errors) {
+
+        if (errors.hasErrors()) {
+            log.error("updateCommentForId: " + errors.getAllErrors().toString());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+
         ValueFromMethod<Comment> resData = commentService.updateCommentForId(adId, commentId, comment);
 
         if (!resData.RESULT) {
@@ -168,11 +181,16 @@ public class AdsController {
      * @return
      */
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<?> addAds(@RequestPart("properties") Adv adv,
+    public ResponseEntity<?> addAds( @Valid @RequestPart("properties") Adv adv, Errors errors,
                              @RequestPart("image") MultipartFile image) {
 
+        if (errors.hasErrors()) {
+            log.error("addAds: " + errors.getAllErrors().toString());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+
         if (!advertisementServ.addAd(adv, image)) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
 
         return ResponseEntity.ok().build();
@@ -204,6 +222,7 @@ public class AdsController {
     public ResponseEntity<?> updateAd(@PathVariable Integer id, @Valid @RequestBody Adv adv, Errors errors ) {
 
         if (errors.hasErrors()) {
+            log.error("updateAd: " + errors.getAllErrors().toString());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
 

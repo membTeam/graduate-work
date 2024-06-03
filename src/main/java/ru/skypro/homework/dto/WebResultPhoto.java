@@ -5,6 +5,11 @@ import lombok.*;
 import lombok.extern.log4j.Log4j;
 import org.springframework.http.HttpHeaders;
 
+/**
+ * Вспомогательная структура, используемая для отображения аватарок,
+ * фотографий объявления. Используется в ImgController
+ *
+ */
 @Log4j
 @Getter
 @Builder

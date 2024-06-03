@@ -6,6 +6,10 @@ import ru.skypro.homework.utils.ValueFromMethod;
 
 import javax.transaction.Transactional;
 
+
+/**
+ * Интерфейс сервиса объявлений
+ */
 public interface AdvertisementService {
 
     boolean updateImageAd(Integer id, MultipartFile image);
@@ -23,7 +27,4 @@ public interface AdvertisementService {
 
     ValueFromMethod detailsAd(Integer advId);
 
-
-/*    @Transactional
-    boolean addAd(Adv adv);*/
 }

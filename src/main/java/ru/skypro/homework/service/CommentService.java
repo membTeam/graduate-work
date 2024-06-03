@@ -5,6 +5,10 @@ import ru.skypro.homework.dto.CommentAdd;
 import ru.skypro.homework.dto.Comments;
 import ru.skypro.homework.utils.ValueFromMethod;
 
+
+/**
+ * Интерфейс сервиса комментарий
+ */
 public interface CommentService {
 
     ValueFromMethod<Comments> getCommentsByAdvId(Integer id);

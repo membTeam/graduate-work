@@ -7,6 +7,10 @@ import ru.skypro.homework.dto.UpdateUser;
 import ru.skypro.homework.dto.UserDTO;
 import ru.skypro.homework.utils.ValueFromMethod;
 
+
+/**
+ * Интерфейс сервиса пользователя
+ */
 public interface UserSerive {
     ValueFromMethod<UserDTO> getMyInfo();
 

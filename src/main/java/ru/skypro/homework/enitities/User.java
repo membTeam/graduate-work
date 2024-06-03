@@ -12,6 +12,9 @@ import java.util.Arrays;
 import java.util.Collection;
 
 
+/**
+ * Класс сущность пользователь
+ */
 @Entity
 @Table(name = "users", uniqueConstraints = @UniqueConstraint(columnNames={"email"}))
 @NoArgsConstructor

@@ -5,6 +5,10 @@ import lombok.*;
 import javax.persistence.*;
 import javax.validation.constraints.Size;
 
+
+/**
+ * Класс-сущность объявления
+ */
 @Entity
 @Getter
 @Setter

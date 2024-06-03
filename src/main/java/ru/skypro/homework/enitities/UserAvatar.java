@@ -5,6 +5,9 @@ import lombok.*;
 
 import javax.persistence.*;
 
+/**
+ * Класс предназначен для хранения аватарок
+ */
 @Getter
 @Builder
 @AllArgsConstructor

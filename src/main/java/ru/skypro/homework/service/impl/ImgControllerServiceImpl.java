@@ -11,6 +11,11 @@ import ru.skypro.homework.service.ImgControllerService;
 import ru.skypro.homework.utils.FileAPI;
 import ru.skypro.homework.utils.UserUtils;
 
+
+/**<pre>Реализация интерфейса ImgControllerService
+ * предназначен для обработки фотографий и аватарок
+ * </pre>
+ */
 @Service
 @RequiredArgsConstructor
 public class ImgControllerServiceImpl implements ImgControllerService {
@@ -20,6 +25,11 @@ public class ImgControllerServiceImpl implements ImgControllerService {
     private final FileAPI fileAPI;
 
 
+    /**
+     * Получить фотографию объявления
+     * @param image
+     * @return
+     */
     @Override
     public WebResultPhoto getPhotoAdv(String image) {
         try {
@@ -45,6 +55,11 @@ public class ImgControllerServiceImpl implements ImgControllerService {
         }
     }
 
+    /**
+     * Получить аватарку пользователя
+     * @param image
+     * @return
+     */
     @Override
     public WebResultPhoto getImageAvatar(String image) {
 

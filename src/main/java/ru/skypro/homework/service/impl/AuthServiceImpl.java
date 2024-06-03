@@ -9,6 +9,10 @@ import ru.skypro.homework.enitities.User;
 import ru.skypro.homework.repositories.UserRepository;
 import ru.skypro.homework.service.AuthService;
 
+/**<pre>Реализация интерфейса AuthService
+ * предназначен для аутентификации и регистрации пользователя
+ * </pre>
+ */
 @Service
 @RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {
@@ -51,16 +55,6 @@ public class AuthServiceImpl implements AuthService {
             return false;
         }
 
-    }
-
-    @Override
-    public boolean existUser(String username) {
-        return userRepo.userExists(username);
-    }
-
-    @Override
-    public UserDetailsService loadUserDetailsService(String username) {
-        return (UserDetailsService) userRepo.findByUsername(username);
     }
 
 }

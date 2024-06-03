@@ -21,6 +21,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 
+/**<pre>Реализация интерфейса AdvertisementService
+ * Предназначен для обработки объявлений
+ * </pre>
+ */
 @Log4j
 @Service
 @RequiredArgsConstructor
@@ -80,6 +84,11 @@ public class AdvertisementServiceImpl  implements AdvertisementService {
     }
 
 
+    /**
+     * Удаление объявления
+     * @param advId
+     * @return
+     */
     @Override
     @Transactional
     public boolean deleteAd(Integer advId) {
@@ -104,6 +113,12 @@ public class AdvertisementServiceImpl  implements AdvertisementService {
         }
     }
 
+    /**
+     * изменение объявления
+     * @param advId
+     * @param ad
+     * @return
+     */
     @Override
     public boolean updateAd(Integer advId, Adv ad) {
 
@@ -124,6 +139,12 @@ public class AdvertisementServiceImpl  implements AdvertisementService {
         return true;
     }
 
+    /**
+     * Изменение фотографии объявления
+     * @param advId
+     * @param image
+     * @return
+     */
     @Override
     public boolean updateImageAd(Integer advId, MultipartFile image) {
 
@@ -144,6 +165,12 @@ public class AdvertisementServiceImpl  implements AdvertisementService {
         }
     }
 
+    /**
+     * добавление объявления
+     * @param adv
+     * @param image
+     * @return
+     */
     @Override
     @Transactional
     public boolean addAd(Adv adv, MultipartFile image) {
@@ -184,6 +211,10 @@ public class AdvertisementServiceImpl  implements AdvertisementService {
         }
     }
 
+    /**
+     * Список ВСЕХ объявлений
+     * @return
+     */
     @Override
     public ValueFromMethod<Ads> allAd() {
 
@@ -192,6 +223,11 @@ public class AdvertisementServiceImpl  implements AdvertisementService {
         return new ValueFromMethod(ads);
     }
 
+    /**
+     * Удаление объявления по ID
+     * @param advId
+     * @return
+     */
     @Override
     public ValueFromMethod<ExtendedAd> detailsAd(Integer advId) {
 
@@ -219,6 +255,10 @@ public class AdvertisementServiceImpl  implements AdvertisementService {
 
     }
 
+    /**
+     * Список объявлений, которые сделал пользователь
+     * @return
+     */
     @Override
     public ValueFromMethod<Ads> myAd() {
         ValueFromMethod<User> fromUserUtils = userUtils.getUserByUsername();

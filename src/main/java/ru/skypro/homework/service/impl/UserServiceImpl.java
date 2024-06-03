@@ -20,6 +20,13 @@ import ru.skypro.homework.utils.ValueFromMethod;
 
 import javax.transaction.Transactional;
 
+/**<pre>Реализация интрефейса UserSerive
+ * предназначен для получении информации пользователя
+ * изменения пароля
+ * изменения аватарки
+ * изменение данных пользователя
+ * </pre>
+ */
 @Service
 @Log4j
 @RequiredArgsConstructor
@@ -31,6 +38,10 @@ public class UserServiceImpl implements UserSerive {
     private final PasswordEncoder encoder;
 
 
+    /**
+     * Данные пользователя
+     * @return
+     */
     @Override
     public ValueFromMethod<UserDTO> getMyInfo() {
         var resFromUtils = userUtils.getUserByUsername();
@@ -62,6 +73,11 @@ public class UserServiceImpl implements UserSerive {
         return new ValueFromMethod(userDTO);
     }
 
+    /**
+     * Изменение аватарки
+     * @param image
+     * @return
+     */
     @Override
     @Transactional
     public boolean setImage(MultipartFile image) {
@@ -103,6 +119,11 @@ public class UserServiceImpl implements UserSerive {
         }
     }
 
+    /**
+     * Изменение пароля
+     * @param newPassword
+     * @return
+     */
     @Override
     public ValueFromMethod<User> setPassword(NewPassword newPassword) {
 
@@ -129,6 +150,11 @@ public class UserServiceImpl implements UserSerive {
         }
     }
 
+    /**
+     * Изменение данных пользователя
+     * @param updateUser
+     * @return
+     */
     @Override
     public ValueFromMethod<UpdateUser> updateUser(UpdateUser updateUser) {
 

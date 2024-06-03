@@ -11,6 +11,4 @@ public interface AuthService {
 
     boolean register(Register register);
 
-    boolean existUser(String username);
-    UserDetailsService loadUserDetailsService(String username);
 }

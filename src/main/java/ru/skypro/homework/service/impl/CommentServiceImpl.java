@@ -21,6 +21,10 @@ import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.stream.Collectors;
 
+/**<pre>Реализация интерфейса CommentService
+ * Предназначен для добавления/изменения/удаления комментарий
+ * </pre>
+ */
 @Log4j
 @Service
 @RequiredArgsConstructor
@@ -66,6 +70,11 @@ public class CommentServiceImpl implements CommentService {
     }
 
 
+    /**
+     * Комментарии, связанные с объявлением
+     * @param id
+     * @return
+     */
     @Override
     public ValueFromMethod<Comments> getCommentsByAdvId(Integer id) {
 
@@ -94,6 +103,12 @@ public class CommentServiceImpl implements CommentService {
         }
     }
 
+    /**
+     * Добавление комментария к объявлению
+     * @param adId
+     * @param comment
+     * @return
+     */
     @Override
     public ValueFromMethod<Comment> addComment(Integer adId, CommentAdd comment) {
         try {
@@ -120,6 +135,13 @@ public class CommentServiceImpl implements CommentService {
         }
     }
 
+    /**
+     * Изменение комментария по его ID
+     * @param id
+     * @param commentId
+     * @param commentAdd
+     * @return
+     */
     @Override
     public ValueFromMethod<Comment> updateCommentForId(Integer id, Integer commentId, CommentAdd commentAdd) {
 
@@ -149,6 +171,12 @@ public class CommentServiceImpl implements CommentService {
 
     }
 
+    /**
+     * Удаление комментария по ID
+     * @param adId
+     * @param commentId
+     * @return
+     */
     @Override
     public ValueFromMethod<Comment> deleteComment(Integer adId, Integer commentId) {
         try {

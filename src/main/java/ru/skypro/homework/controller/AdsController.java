@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.*;
@@ -13,6 +14,10 @@ import ru.skypro.homework.service.AdvertisementService;
 import ru.skypro.homework.service.CommentService;
 import ru.skypro.homework.utils.UserUtils;
 import ru.skypro.homework.utils.ValueFromMethod;
+
+import javax.validation.Valid;
+import org.springframework.validation.Errors;
+
 
 /**
  * Контроллер предназначен для: <pre>
@@ -196,9 +201,14 @@ public class AdsController {
      * @return
      */
     @PatchMapping("{id}")
-    public ResponseEntity<?> updateAd(@PathVariable Integer id, @RequestBody Adv adv) {
+    public ResponseEntity<?> updateAd(@PathVariable Integer id, @Valid @RequestBody Adv adv, Errors errors ) {
+
+        if (errors.hasErrors()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+
         if (!advertisementServ.updateAd(id, adv)) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
 
         return ResponseEntity.ok().build();

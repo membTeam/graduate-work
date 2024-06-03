@@ -3,7 +3,12 @@ package ru.skypro.homework.dto;
 
 import lombok.*;
 
-
+/**
+ <pre>Класс комментария.
+    Используется в интерфейсе CommentService
+    в качестве возвращаемого результата
+ </pre>
+ */
 @Getter
 @AllArgsConstructor
 @Builder

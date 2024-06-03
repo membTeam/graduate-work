@@ -6,6 +6,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+/**
+ * Класс добавления/изменения комментария
+ */
 @Getter
 @Builder
 @AllArgsConstructor

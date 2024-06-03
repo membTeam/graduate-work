@@ -7,6 +7,11 @@ import ru.skypro.homework.enitities.CommentEnt;
 
 import java.util.List;
 
+
+/**<pre>Репозиторий комментарий
+ * getCommentsByAdvertisement не поддерживается hibernate
+ * </pre>
+ */
 public interface CommentRepository extends JpaRepository<CommentEnt, Integer> {
 
     @Query(value = "from CommentEnt com where com.adId = :adId")

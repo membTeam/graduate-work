@@ -4,6 +4,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import ru.skypro.homework.enitities.UserAvatar;
 
+/**<pre>Репозиторий аватарок
+ * existsUserAvatar and existsImgAvatar не поддерживаются hibernate
+ * </pre>
+ */
 public interface UserAvatarRepository extends JpaRepository<UserAvatar, Integer> {
         UserAvatar findByImage(String image);
 

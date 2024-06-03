@@ -4,6 +4,10 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import ru.skypro.homework.enitities.User;
 
+
+/**
+ * Репозиторий Пользователя
+ */
 public interface UserRepository extends CrudRepository<User, Integer> {
     @Query("select u From User u where u.email = :username")
     User findByUsername(String username);

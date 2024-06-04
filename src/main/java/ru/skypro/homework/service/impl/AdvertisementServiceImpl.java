@@ -23,6 +23,7 @@ import java.util.stream.Collectors;
 
 /**<pre>Реализация интерфейса AdvertisementService
  * Предназначен для обработки объявлений
+ * добавление, изменение, удаление
  * </pre>
  */
 @Log4j

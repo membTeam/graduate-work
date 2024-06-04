@@ -76,6 +76,8 @@ public class User implements UserDetails {
         return true;
     }
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY,
+            cascade = CascadeType.ALL,
+            mappedBy = "user")
     private UserAvatar avatar;
 }

@@ -181,8 +181,8 @@ public class AdsController {
      * @return
      */
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<?> addAds( @Valid @RequestPart("properties") Adv adv, Errors errors,
-                             @RequestPart("image") MultipartFile image) {
+    public ResponseEntity<?> addAds(@Valid @RequestPart("properties") CreateOrUpdateAd adv, Errors errors,
+                                    @RequestPart("image") MultipartFile image) {
 
         if (errors.hasErrors()) {
             log.error("addAds: " + errors.getAllErrors().toString());
@@ -219,7 +219,7 @@ public class AdsController {
      * @return
      */
     @PatchMapping("{id}")
-    public ResponseEntity<?> updateAd(@PathVariable Integer id, @Valid @RequestBody Adv adv, Errors errors ) {
+    public ResponseEntity<?> updateAd(@PathVariable Integer id, @Valid @RequestBody CreateOrUpdateAd adv, Errors errors ) {
 
         if (errors.hasErrors()) {
             log.error("updateAd: " + errors.getAllErrors().toString());

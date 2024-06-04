@@ -7,16 +7,12 @@ CREATE TABLE IF NOT EXISTS public.users
     password character varying(255) COLLATE pg_catalog."default",
     phone character varying(50) COLLATE pg_catalog."default",
     role character varying(20) COLLATE pg_catalog."default",
-    avatar_id integer,
     CONSTRAINT users_pkey PRIMARY KEY (id),
-    CONSTRAINT uk6dotkott2kjsp8vw4d0m25fb7 UNIQUE (email),
-    CONSTRAINT fk7puvf45ag65uok4ue7fhks1y3 FOREIGN KEY (avatar_id)
-        REFERENCES public.user_avatar (id) MATCH SIMPLE
-        ON UPDATE NO ACTION
-        ON DELETE NO ACTION
+    CONSTRAINT uk6dotkott2kjsp8vw4d0m25fb7 UNIQUE (email)
 )
 
 TABLESPACE pg_default;
+
 ALTER TABLE IF EXISTS public.users
     OWNER to postgres;
 

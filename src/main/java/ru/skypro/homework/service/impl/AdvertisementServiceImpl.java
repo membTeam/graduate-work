@@ -121,7 +121,7 @@ public class AdvertisementServiceImpl  implements AdvertisementService {
      * @return
      */
     @Override
-    public boolean updateAd(Integer advId, Adv ad) {
+    public boolean updateAd(Integer advId, CreateOrUpdateAd ad) {
 
         var resVerifyUser = verifyUser(advId);
 
@@ -174,7 +174,7 @@ public class AdvertisementServiceImpl  implements AdvertisementService {
      */
     @Override
     @Transactional
-    public boolean addAd(Adv adv, MultipartFile image) {
+    public boolean addAd(CreateOrUpdateAd adv, MultipartFile image) {
 
         ValueFromMethod<User> fromUserUtils = userUtils.getUserByUsername();
         if (!fromUserUtils.RESULT) {

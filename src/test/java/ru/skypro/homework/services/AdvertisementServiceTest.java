@@ -2,7 +2,6 @@ package ru.skypro.homework.services;
 
 
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -21,7 +20,7 @@ import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 
 import ru.skypro.homework.dto.Ads;
-import ru.skypro.homework.dto.Adv;
+import ru.skypro.homework.dto.CreateOrUpdateAd;
 import ru.skypro.homework.dto.Role;
 import ru.skypro.homework.enitities.Advertisement;
 import ru.skypro.homework.enitities.User;
@@ -87,7 +86,7 @@ public class AdvertisementServiceTest {
                 .id(1).userId(user.getId())
                 .build();
 
-        var adv = Adv.builder()
+        var adv = CreateOrUpdateAd.builder()
                 .price(3000)
                 .title("Позиционирование товара")
                 .description("Описание выставленного товара")
@@ -161,7 +160,7 @@ public class AdvertisementServiceTest {
                 .role(Role.USER)
                 .build();
 
-        var adv = Adv.builder()
+        var adv = CreateOrUpdateAd.builder()
                 .price(3000)
                 .title("Позиционирование товара")
                 .description("Описание выставленного товара")

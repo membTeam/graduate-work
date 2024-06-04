@@ -27,4 +27,15 @@
 - CommentServiceImpl -> Сервис комментарий: добавление, изменение, удаление
 - ImgControllerService -> Сервис выгрузки аватарки, фотографий объявлений
 
+## Библиотеки и технологии
+- Spring boot version 2.7.15
+- Spring version 5.*
+- Postgresql last version развернут в docker container
+
+### Вспомогательные библиотеки
+- liquibase
+- hibernate-validator
+- springdoc
+- lombok
+
 

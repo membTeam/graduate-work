@@ -29,7 +29,7 @@ public class UserAvatar {
 
     private byte[] data;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @MapsId
     @JoinColumn(name = "id")
     @JsonIgnore

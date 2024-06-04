@@ -12,6 +12,10 @@ import ru.skypro.homework.dto.Login;
 import ru.skypro.homework.dto.Register;
 import ru.skypro.homework.service.AuthService;
 
+
+/**
+ * Контроллер аутентификации и авторизации
+ */
 @Slf4j
 @CrossOrigin(value = "http://localhost:3000")
 @RestController
@@ -20,6 +24,11 @@ public class AuthController {
 
     private final AuthService authService;
 
+    /**
+     * Аутенификация пользователя по логину и пародю
+     * @param login
+     * @return
+     */
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody Login login) {
         if (authService.login(login.getUsername(), login.getPassword())) {
@@ -29,6 +38,11 @@ public class AuthController {
         }
     }
 
+    /**
+     * Регистрация нового пользователя
+     * @param register
+     * @return
+     */
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody Register register) {
         if (authService.register(register)) {

@@ -1,0 +1,9 @@
+databaseChangeLog:
+  - include:
+      file: liquibase/scripts/users.sql
+  - include:
+      file: liquibase/scripts/user-avatar.sql
+  - include:
+      file: liquibase/scripts/advertisement.sql
+  - include:
+      file: liquibase/scripts/comment.sql

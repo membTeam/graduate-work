@@ -55,7 +55,6 @@ public class UserServiceImpl implements UserSerive {
         var user = resFromUtils.getValue();
         var userAvatarFromRepo = userAvatarRepo.findById(user.getId());
 
-
         String image = "/img/avatar/empty";
         if (userAvatarFromRepo.isPresent()) {
             image = (userAvatarFromRepo.orElseThrow()).getImage();
@@ -92,12 +91,15 @@ public class UserServiceImpl implements UserSerive {
 
             User user = dataFromUserUtils.getValue();
 
-            var hashId = user.getId().toString().hashCode();
-            var strImage = String.format("/img/avatar/avatar-%d", hashId);
+            var originName = image.getOriginalFilename();
+            var file = originName.substring(0, originName.lastIndexOf('.'));
 
-            if (userAvatarRepo.existsImgAvatar(strImage)) {
-                throw new IllegalArgumentException("Повторный ввод image аватара");
-            }
+            var hashId = (user.getId().toString() + file).hashCode();
+            var strFormat = hashId > 0
+                    ? "/img/avatar/avatar-%d"
+                    : "/img/avatar/img-avatar%d";
+
+            var strImage = String.format(strFormat, hashId);
 
             UserAvatar userAvatar = UserAvatar.builder()
                     .user(user)
@@ -108,7 +110,7 @@ public class UserServiceImpl implements UserSerive {
                     .build();
 
             if (userAvatarRepo.existsUserAvatar(user.getId())) {
-                userAvatarRepo.deleteById(user.getId());
+                userAvatar.setId(user.getId());
             }
 
             userAvatarRepo.save(userAvatar);

@@ -61,30 +61,35 @@ public class UserServiceImplTest {
                 .role(Role.USER)
                 .build();
 
-        var hashId = user.getId().toString().hashCode();
-        var strImage = String.format("/img/avatar/avatar-%d", hashId);
-
-        var userAvatarAfterSave = UserAvatar.builder()
-                .id(1)
-                .image(strImage)
-                .build();
-
         byte[] data = Files.readAllBytes(pathPhoto);
-
-        MockMultipartFile file = new MockMultipartFile(
+        MockMultipartFile image = new MockMultipartFile(
                 "file",
                 String.valueOf(pathPhoto.getFileName()),
                 String.valueOf(MediaType.IMAGE_PNG),
                 data
         );
 
+        var originName = image.getOriginalFilename();
+        var file = originName.substring(0, originName.lastIndexOf('.'));
+
+        var hashId = (user.getId().toString() + file).hashCode();
+        var strFormat = hashId > 0
+                ? "/img/avatar/avatar-%d"
+                : "/img/avatar/img-avatar%d";
+
+        var strImage = String.format(strFormat, hashId);
+
+        var userAvatarAfterSave = UserAvatar.builder()
+                .id(1)
+                .image(strImage)
+                .build();
+
         when(userRepo.getDefaultUser()).thenReturn(user);
         when(userAvatarRepo.save(any(UserAvatar.class))).thenReturn(userAvatarAfterSave);
         when(userAvatarRepo.existsImgAvatar(any(String.class))).thenReturn(true);
         when(userUtils.getUserByUsername()).thenReturn(new ValueFromMethod(user));
-        doNothing().when(userAvatarRepo).deleteById(any(Integer.class));
 
-        assertFalse(userServiceImpl.setImage(file));
+        assertTrue(userServiceImpl.setImage(image));
     }
 
 
@@ -98,31 +103,36 @@ public class UserServiceImplTest {
                 .role(Role.USER)
                 .build();
 
-        var hashId = user.getId().toString().hashCode();
-        var strImage = String.format("/img/avatar/avatar-%d", hashId);
-
-        var userAvatarAfterSave = UserAvatar.builder()
-                .id(1)
-                .image(strImage)
-                .build();
-
         byte[] data = Files.readAllBytes(pathPhoto);
-
-        MockMultipartFile file = new MockMultipartFile(
+        MockMultipartFile image = new MockMultipartFile(
                 "file",
                 String.valueOf(pathPhoto.getFileName()),
                 String.valueOf(MediaType.IMAGE_PNG),
                 data
         );
 
+        var originName = image.getOriginalFilename();
+        var file = originName.substring(0, originName.lastIndexOf('.'));
+
+        var hashId = (user.getId().toString() + file).hashCode();
+        var strFormat = hashId > 0
+                ? "/img/avatar/avatar-%d"
+                : "/img/avatar/img-avatar%d";
+
+        var strImage = String.format(strFormat, hashId);
+
+        var userAvatarAfterSave = UserAvatar.builder()
+                .id(null)
+                .image(strImage)
+                .build();
+
         when(userUtils.getUserByUsername()).thenReturn(new ValueFromMethod(user));
 
         when(userAvatarRepo.existsUserAvatar(any(Integer.class))).thenReturn(false);
         when(userAvatarRepo.existsImgAvatar(any(String.class))).thenReturn(false);
-
         when(userAvatarRepo.save(any(UserAvatar.class))).thenReturn(userAvatarAfterSave);
 
-        assertTrue(userServiceImpl.setImage(file));
+        assertTrue(userServiceImpl.setImage(image));
     }
 
     @Test
@@ -147,7 +157,7 @@ public class UserServiceImplTest {
                 .lastName(user.getLastName())
                 .image(user.getAvatar() != null
                         ? user.getAvatar().getImage()
-                        : "/img/adv/image/empty" )
+                        : "/img/avatar/empty" )
                 .build();
 
         when(userRepo.getDefaultUser()).thenReturn(user);
@@ -157,7 +167,7 @@ public class UserServiceImplTest {
         var res = userServiceImpl.getMyInfo();
 
         assertTrue(res.RESULT);
-        assertEquals("/img/adv/image/empty", res.getValue().getImage());
+        assertEquals("/img/avatar/empty", res.getValue().getImage());
     }
 
     @Test

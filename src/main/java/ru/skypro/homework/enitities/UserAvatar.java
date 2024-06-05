@@ -16,6 +16,7 @@ import javax.persistence.*;
 @Table(uniqueConstraints = @UniqueConstraint(columnNames={"image"}))
 public class UserAvatar {
     @Id
+    @Setter
     private Integer id;
 
     @Column(name = "file_size")

@@ -4,10 +4,7 @@ package ru.skypro.homework.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import ru.skypro.homework.dto.WebResultPhoto;
 import ru.skypro.homework.service.ImgControllerService;
 
@@ -18,6 +15,7 @@ import ru.skypro.homework.service.ImgControllerService;
  * </pre>
  */
 @RestController
+@CrossOrigin(value = "http://localhost:3000")
 @RequiredArgsConstructor
 @RequestMapping("/img")
 public class ImgController {

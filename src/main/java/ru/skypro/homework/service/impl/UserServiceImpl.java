@@ -55,7 +55,8 @@ public class UserServiceImpl implements UserSerive {
         var user = resFromUtils.getValue();
         var userAvatarFromRepo = userAvatarRepo.findById(user.getId());
 
-        String image = "/img/adv/image/empty";
+
+        String image = "/img/avatar/empty";
         if (userAvatarFromRepo.isPresent()) {
             image = (userAvatarFromRepo.orElseThrow()).getImage();
         }

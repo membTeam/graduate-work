@@ -22,7 +22,7 @@ import ru.skypro.homework.repositories.AdvertisementRepository;
  * Тестирование авторизации
  */
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class UserServiceTest {
+public class AuthorizationTest {
 
     @Autowired
     private AdvertisementRepository advertisementRepo;

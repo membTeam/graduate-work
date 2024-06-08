@@ -21,6 +21,8 @@ import javax.validation.Valid;
 import org.springframework.validation.Errors;
 
 
+
+
 /**
  * Контроллер предназначен для: <pre>
  *     удаление/добавление/обновление комментариев
@@ -31,10 +33,11 @@ import org.springframework.validation.Errors;
  *     ВСЕ остальные методы только для зарегистрированных пользователей
  * </pre>
  */
-@CrossOrigin(value = "http://localhost:3000")
+
 @RestController
 @RequestMapping("/ads")
 @RequiredArgsConstructor
+@CrossOrigin(value = "http://localhost:3000")
 public class AdsController {
 
     private static final Logger log = LoggerFactory.getLogger(AdsController.class);
@@ -92,7 +95,7 @@ public class AdsController {
      */
     @GetMapping("{id}/comments")
     public ResponseEntity<?> getCommentsForId(@PathVariable Integer id) {
-       ValueFromMethod<Comments> resData = commentService.getCommentsByAdvId(id);
+        ValueFromMethod<Comments> resData = commentService.getCommentsByAdvId(id);
 
         if (!resData.RESULT) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();

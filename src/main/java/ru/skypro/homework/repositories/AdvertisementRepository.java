@@ -16,7 +16,7 @@ public interface AdvertisementRepository extends JpaRepository<Advertisement, In
 
     Optional<Advertisement> findByImage(String image);
 
-    @Query(value = "select id from advertisement where id = (select min(id) from advertisement)", nativeQuery = true)
-    Integer getMinId();
+    @Query(value = "select COALESCE(min(id), -1) from advertisement;", nativeQuery = true)
+    int getMinId();
 
 }
